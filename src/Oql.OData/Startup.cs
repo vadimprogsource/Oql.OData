@@ -37,10 +37,13 @@ namespace Oql.OData
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+
+            ConnectionString = Configuration["Data:DefaultConnection:ConnectionString"];
         }
 
 
-        public string ConnectionString { get; } = "Data Source =.; Initial Catalog = crm; User ID = sa; Password = 1; Connection Timeout = 18";
+        public string ConnectionString { get; }
 
         public IConfigurationRoot Configuration { get; }
 

@@ -59,7 +59,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
                 foreach (IMemberInfo m in obj.Members)
                 {
-                    hc ^= m.GetHashCode();
+                    hc ^= (m.BaseType.GetHashCode() ^ m.Name.GetHashCode());
                 }
 
                 return hc;
