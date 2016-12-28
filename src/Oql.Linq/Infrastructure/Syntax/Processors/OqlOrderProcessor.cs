@@ -1,4 +1,6 @@
-﻿using Oql.Linq.Api.Metadata;
+﻿using Oql.Linq.Api.CodeGen;
+using Oql.Linq.Api.Metadata;
+using Oql.Linq.Api.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,87 +10,59 @@ using System.Threading.Tasks;
 namespace Oql.Linq.Infrastructure.Syntax.Processors
 {
 
-    public class OqlOrderProcessor
+    public class OqlOrderProcessor : OqlBaseProcessor
     {
-        private interface ICommand
+        private class OrderByCommand<TEntity, TResult> : OqlBaseCommand<TEntity, TResult>
         {
-            IQueryable ExecuteCommand(IQueryable query, LambdaExpression expression);
+            public override IQueryable ExecuteCommand(IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> lambda)
+            {
+                return query.OrderBy(lambda);
+            }
         }
 
-
-        private  class OrderByCommand<TEntity,TProperty> : ICommand
+        private class ThenByCommand<TEntity, TResult> : OqlBaseCommand<TEntity, TResult>
         {
-            public IQueryable ExecuteCommand(IQueryable query, LambdaExpression expression)
+            public override IQueryable ExecuteCommand(IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> lambda)
             {
-                return ExecuteOrderBy(query as IQueryable<TEntity>, expression as Expression<Func<TEntity, TProperty>>);
+                return (query as IOrderedQueryable<TEntity>).ThenBy(lambda);
             }
-
-            public virtual IQueryable ExecuteOrderBy(IQueryable<TEntity> query, Expression<Func<TEntity, TProperty>> expession)
-            {
-                return query.OrderBy(expession);
-            }
-      
         }
 
-        private  class ThenByCommand<TEntity, TProperty> : ICommand
+        private class OrderByDescendingCommand<TEntity, TResult> : OqlBaseCommand<TEntity, TResult>
         {
-            public IQueryable ExecuteCommand(IQueryable query, LambdaExpression expression)
+            public override IQueryable ExecuteCommand(IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> lambda)
             {
-                return ExecuteThenBy(query as IOrderedQueryable<TEntity>, expression as Expression<Func<TEntity, TProperty>>);
+                return query.OrderByDescending(lambda);
             }
-
-            public virtual IQueryable ExecuteThenBy(IOrderedQueryable<TEntity> query, Expression<Func<TEntity, TProperty>> expession)
-            {
-                return query.ThenBy(expession);
-            }
-
         }
 
-
-        private class OrderByDescendingCommand<TEntity, TProperty> : OrderByCommand<TEntity, TProperty>
+        private class ThenByDescendingCommand<TEntity, TResult> : OqlBaseCommand<TEntity, TResult>
         {
-            public override IQueryable ExecuteOrderBy(IQueryable<TEntity> query, Expression<Func<TEntity, TProperty>> expession)
+            public override IQueryable ExecuteCommand(IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> lambda)
             {
-                return query.OrderByDescending(expession);
+                return (query as IOrderedQueryable<TEntity>).ThenByDescending(lambda);
             }
         }
 
 
-        private class ThenByDescendingCommand<TEntity, TProperty> : ThenByCommand<TEntity, TProperty>
-        {
-            public override IQueryable ExecuteThenBy(IOrderedQueryable<TEntity> query, Expression<Func<TEntity, TProperty>> expession)
-            {
-                return query.ThenByDescending(expession);
-            }
-        }
-
-        
 
 
-        private IQueryable ExecuteCommand<T>(IQueryable query , Type commandType , string propertyOrField)
-        {
-            ParameterExpression x   = Expression.Parameter(typeof(T), "x");
-            LambdaExpression lambda = Expression.Lambda(Expression.PropertyOrField(x, propertyOrField), x);
-
-            ICommand command = Activator.CreateInstance(commandType.MakeGenericType(typeof(T), lambda.Body.Type), true) as ICommand;
-
-            return command.ExecuteCommand(query, lambda);
-        }
 
 
         public IQueryable<T> ProcessOrderBy<T>(IQueryable<T> query, IExpression expression)
         {
 
-            IQueryable q;
+            IQueryable         q;
+            IExpressionBuilder b = (query.Provider as IObjectQueryProvider).CreateExpressionBuilder();
 
 
             if (expression.Desc)
             {
-                q = ExecuteCommand<T>(query, typeof(OrderByDescendingCommand<,>), expression.Name);
+                q = ExecuteCommand(query, typeof(OrderByDescendingCommand<,>), b.MakeMemberAccess(typeof(T), expression.Name));
             }
             else
             {
-                q = ExecuteCommand<T>(query, typeof(OrderByCommand<,>), expression.Name);
+                q = ExecuteCommand(query, typeof(OrderByCommand<,>), b.MakeMemberAccess(typeof(T), expression.Name));
             }
 
 
@@ -96,11 +70,11 @@ namespace Oql.Linq.Infrastructure.Syntax.Processors
             {
                 if (x.Desc)
                 {
-                    q = ExecuteCommand<T>(q, typeof(ThenByDescendingCommand<,>), x.Name);
+                    q = ExecuteCommand(q, typeof(ThenByDescendingCommand<,>), b.MakeMemberAccess(typeof(T), x.Name));
                     continue;
                 }
 
-                q = ExecuteCommand<T>(q, typeof(ThenByCommand<,>), x.Name);
+                q = ExecuteCommand(q, typeof(ThenByCommand<,>), b.MakeMemberAccess(typeof(T), x.Name));
 
             }
 

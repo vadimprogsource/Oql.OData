@@ -161,7 +161,7 @@ namespace Oql.MsSql
 
             public string GetName(DataRow row)
             {
-                return row[m_column_name].ToString();
+                return row[m_column_name].ToString().ToLowerInvariant();
             }
 
 

@@ -25,7 +25,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
                             if (mx.BaseType == my.BaseType && mx.Name == my.Name)
                             {
-                                mx = ay[j]; my = ay[j];
+                                mx = ax[j]; my = ay[j];
 
                                 if (mx.BaseType == my.BaseType && mx.Name == my.Name)
                                 {
@@ -45,7 +45,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
             public int GetHashCode(IEntityInfo obj)
             {
-                int hc = string.Empty.GetHashCode();
+                int hc =  obj.GetType().GetHashCode();
 
                 if (obj.BaseType != null)
                 {

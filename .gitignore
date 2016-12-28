@@ -3,3 +3,14 @@
 ################################################################################
 
 /src/OData.Linq/bin/Debug/net452/System.Runtime.InteropServices.RuntimeInformation.dll
+/src/OData.Linq/bin/Debug/net452/Oql.Linq.pdb
+/src/OData.Linq/bin/Debug/net452/Oql.Linq.dll
+/src/OData.Linq/bin/Debug/net452/OData.Linq.pdb
+/src/OData.Linq/bin/Debug/net452/OData.Linq.dll
+/src/OData.Linq/obj/Debug/net452
+/src/Oql.Linq/bin/Debug/net452
+/src/Oql.Linq/obj/Debug/net452
+/src/Oql.MsSql/bin/Debug/net452
+/src/Oql.MsSql/obj/Debug/net452
+/src/Oql.OData/bin/Debug/net452
+/src/Oql.OData/obj/Debug/net452
