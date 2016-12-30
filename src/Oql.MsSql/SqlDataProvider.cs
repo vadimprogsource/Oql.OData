@@ -17,11 +17,6 @@ namespace Oql.MsSql
     public class SqlDataProvider : IDataProvider 
     {
 
-        public IOqlSyntaxContext CreateSyntaxContext()
-        {
-            return new SqlSyntaxContext().ForSelect();
-        }
-
         public IMetadataProvider GetMetadata()
         {
             return new SqlMetadataProvider(m_connection_string);
@@ -30,6 +25,11 @@ namespace Oql.MsSql
         public IDataSource GetDataSource()
         {
             return new SqlDataSource(new SqlConnection(m_connection_string));
+        }
+
+        public IOqlExpressionVisitor CreateExpressionVisitor()
+        {
+            return new OqlExpressionVisitor(new SqlSyntaxContext().ForSelect());
         }
 
         private string m_connection_string;
