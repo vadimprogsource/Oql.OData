@@ -40,7 +40,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
                 while (m_stack.Count > 0)
                 {
-                    visitor.QueryBuilder.AppendExpressionSeparator();
+                    visitor.Query.AppendExpressionSeparator();
                     x = m_stack.Pop();
                     PopVisit(visitor, x.Item1, x.Item2);
                 }

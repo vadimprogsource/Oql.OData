@@ -8,29 +8,29 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
     {
         public void FormatAndAlso(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendAndAlso();
+            visitor.Query.AppendAndAlso();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
 
         }
 
         public void FormatNot(IOqlExpressionVisitor visitor, Expression operand)
         {
-            visitor.QueryBuilder.AppendNot().AppendBeginExpression();
+            visitor.Query.AppendNot().AppendBeginExpression();
             visitor.Visit(operand);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatOrElse(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
 
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendOrElse();
+            visitor.Query.AppendOrElse();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
 
         }
     }

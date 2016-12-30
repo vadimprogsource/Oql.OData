@@ -8,38 +8,38 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
     {
         public void FormatAdd(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendAdd();
+            visitor.Query.AppendAdd();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatAddChecked(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendAdd();
+            visitor.Query.AppendAdd();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatDivide(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendDivide();
+            visitor.Query.AppendDivide();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatMultiply(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendMultiply();
+            visitor.Query.AppendMultiply();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatMultiplyAssignChecked(IOqlExpressionVisitor visitor, Expression left, Expression right)
@@ -49,9 +49,9 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
         public void FormatNegate(IOqlExpressionVisitor visitor, Expression operand)
         {
-            visitor.QueryBuilder.AppendNegate().AppendBeginExpression();
+            visitor.Query.AppendNegate().AppendBeginExpression();
             visitor.Visit(operand);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatNegateChecked(IOqlExpressionVisitor visitor, Expression operand)
@@ -61,27 +61,27 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
         public void FormatSubtract(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendAdd();
+            visitor.Query.AppendAdd();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatSubtractChecked(IOqlExpressionVisitor visitor, Expression left, Expression right)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(left);
-            visitor.QueryBuilder.AppendSubtract();
+            visitor.Query.AppendSubtract();
             visitor.Visit(right);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
         public void FormatUnaryPlus(IOqlExpressionVisitor visitor, Expression operand)
         {
-            visitor.QueryBuilder.AppendPlus().AppendBeginExpression();
+            visitor.Query.AppendPlus().AppendBeginExpression();
             visitor.Visit(operand);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
     }
 }

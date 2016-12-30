@@ -1,22 +1,22 @@
-﻿using Oql.Linq.Api.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Oql.Linq.Api.Syntax;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
-    public class OqlFromClause : OqlBaseClause 
+    public class OqlInsertClause : OqlBaseClause
     {
-    
         public override void AddMethodCall(MethodCallExpression methodCall)
         {
+            throw new NotImplementedException();
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
         {
-            visitor.Query.AppendFrom().AppendType(visitor.BaseEntityType);
+            throw new NotImplementedException();
         }
     }
 }

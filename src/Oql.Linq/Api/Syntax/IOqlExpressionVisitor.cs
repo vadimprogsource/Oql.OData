@@ -11,8 +11,8 @@ namespace Oql.Linq.Api.Syntax
         Type BaseEntityType { get;  }
         Type ResulType      { get; set; }
 
-        IOqlSyntaxProvider  SyntaxProvider { get; }
-        IQueryBuilder        QueryBuilder { get; }
+        IOqlSyntaxContext  Context { get; }
+        IQueryBuilder       Query  { get; }
         Expression Visit(Expression expression);
         void VisitSearchPattern(bool hasBeginWildCard, Expression expression, bool hasEndWildCard);
 

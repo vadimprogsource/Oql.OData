@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 using Oql.Linq.Api.Syntax;
-using Oql.Linq.Infrastructure.Metadata;
 using Oql.Linq.Api.Metadata;
+using Oql.Linq.Infrastructure.Syntax.Methods;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
@@ -44,19 +42,25 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
         protected virtual void VisitForSelect(IOqlExpressionVisitor visitor)
         {
-            visitor.QueryBuilder.AppendSelect();
+            visitor.Query.AppendSelect();
 
             if (m_has_distinct)
             {
-                visitor.QueryBuilder.AppendDistinct();
+                visitor.Query.AppendDistinct();
             }
 
 
-            int size = visitor.SyntaxProvider.GetTake().Size;
+
+            if (visitor.Context.Taken == null)
+            {
+                return;
+            }
+
+            int size = visitor.Context.Taken.Size;
 
             if (size > 0 && size < int.MaxValue)
             {
-                visitor.QueryBuilder.AppendTop(size);
+                visitor.Query.AppendTop(size);
             }
 
 
@@ -83,12 +87,12 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
                     if (inProcess)
                     {
-                        visitor.QueryBuilder.AppendExpressionSeparator();
+                        visitor.Query.AppendExpressionSeparator();
                     }
 
                     inProcess = true;
 
-                    visitor.QueryBuilder.AppendMember(mi);
+                    visitor.Query.AppendMember(mi);
 
                 }
 

@@ -59,9 +59,9 @@ namespace Oql.Linq.Infrastructure.Query
         public object Execute(Expression expression)
         {
 
-            IOqlExpressionVisitor visitor = new OqlExpressionVisitor(m_data_provider.GetSyntax(), m_data_provider.GetQuery());
+            IOqlExpressionVisitor visitor = new OqlExpressionVisitor(m_data_provider.CreateSyntaxContext());
             visitor.VisitAndBuild(expression);
-            return Activator.CreateInstance(typeof(ObjectQueryIterator<>).MakeGenericType(visitor.ResulType), m_data_provider.GetDataSource(), visitor.QueryBuilder);
+            return Activator.CreateInstance(typeof(ObjectQueryIterator<>).MakeGenericType(visitor.ResulType), m_data_provider.GetDataSource(), visitor.Query);
         }
 
         public TResult Execute<TResult>(Expression expression)

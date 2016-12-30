@@ -5,11 +5,8 @@ namespace Oql.Linq.Api.Data
 {
     public  interface IDataProvider
     {
-        
-        IOqlSyntaxProvider GetSyntax();
+        IOqlSyntaxContext CreateSyntaxContext();
         IMetadataProvider  GetMetadata();
-        IQueryBuilder      GetQuery();
-
         IDataSource        GetDataSource();
     }
 }

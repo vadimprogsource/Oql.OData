@@ -1,12 +1,10 @@
-﻿using Oql.Linq.Infrastructure.Metadata;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 using Oql.Linq.Api.Syntax;
 using Oql.Linq.Api.Metadata;
+using Oql.Linq.Infrastructure.Syntax.Methods;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
@@ -37,14 +35,14 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         protected virtual void VisitForAsc(IOqlExpressionVisitor visitor, Expression expression)
         {
             visitor.Visit(expression);
-            visitor.QueryBuilder.AppendAsc();
+            visitor.Query.AppendAsc();
         }
 
 
         protected virtual void VisitForDesc(IOqlExpressionVisitor visitor, Expression expression)
         {
             visitor.Visit(expression);
-            visitor.QueryBuilder.AppendDesc();
+            visitor.Query.AppendDesc();
         }
 
 
@@ -66,7 +64,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
                 return;
             }
 
-            visitor.QueryBuilder.AppendOrderBy();
+            visitor.Query.AppendOrderBy();
 
             base.VisitTo(visitor);
         }

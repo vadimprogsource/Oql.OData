@@ -14,12 +14,12 @@ using Oql.Linq.Api;
 
 namespace Oql.MsSql
 {
-    public class SqlDataProvider : OqlSyntaxProvider ,IDataProvider 
+    public class SqlDataProvider : IDataProvider 
     {
 
-        public IOqlSyntaxProvider GetSyntax()
+        public IOqlSyntaxContext CreateSyntaxContext()
         {
-            return this;
+            return new SqlSyntaxContext().ForSelect();
         }
 
         public IMetadataProvider GetMetadata()
@@ -37,13 +37,7 @@ namespace Oql.MsSql
         public SqlDataProvider(string connectionString)
         {
             m_connection_string = connectionString;
-
-            Select().From().Where().OrderBy().TakeBy();
         }
 
-        public IQueryBuilder GetQuery()
-        {
-            return new SqlQueryBuilder();
-        }
     }
 }

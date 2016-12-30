@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using Oql.Linq.Infrastructure.Metadata;
 using Oql.Linq.Api.Syntax;
 using Oql.Linq.Api.Metadata;
+using Oql.Linq.Infrastructure.Syntax.Methods;
 
 namespace Oql.Linq.Infrastructure.Syntax.Formatters
 {
@@ -14,23 +13,23 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
         {
             if (methodCall.Method.DeclaringType == typeof(Enumerable))
             {
-                visitor.QueryBuilder.AppendBeginExpression();
+                visitor.Query.AppendBeginExpression();
                 visitor.Visit(methodCall.Arguments.First());
-                visitor.QueryBuilder.AppendIn();
+                visitor.Query.AppendIn();
                 visitor.Visit(methodCall.Arguments[1]);
-                visitor.QueryBuilder.AppendEndExpression();
+                visitor.Query.AppendEndExpression();
 
                 return;
             }
 
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
 
 
             visitor.Visit(methodCall.Object);
-            visitor.QueryBuilder.AppendLike();
+            visitor.Query.AppendLike();
             visitor.VisitSearchPattern(true, methodCall.Arguments.First(), true);
 
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
 

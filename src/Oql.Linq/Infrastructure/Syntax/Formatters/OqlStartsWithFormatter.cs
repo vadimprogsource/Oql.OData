@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Oql.Linq.Infrastructure.Metadata;
 using Oql.Linq.Api.Syntax;
 using Oql.Linq.Api.Metadata;
+using Oql.Linq.Infrastructure.Syntax.Methods;
 
 namespace Oql.Linq.Infrastructure.Syntax.Formatters
 {
@@ -11,11 +11,11 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
     {
         public override void FormatMethodCall(IOqlExpressionVisitor visitor, MethodCallExpression method)
         {
-            visitor.QueryBuilder.AppendBeginExpression();
+            visitor.Query.AppendBeginExpression();
             visitor.Visit(method.Object);
-            visitor.QueryBuilder.AppendLike();
+            visitor.Query.AppendLike();
             visitor.VisitSearchPattern(true, method.Arguments.First(),false);
-            visitor.QueryBuilder.AppendEndExpression();
+            visitor.Query.AppendEndExpression();
         }
 
 

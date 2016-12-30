@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Oql.Linq.Api.Syntax;
 using Oql.Linq.Api.Metadata;
-using Oql.Linq.Infrastructure.Metadata;
+using Oql.Linq.Infrastructure.Syntax.Methods;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
