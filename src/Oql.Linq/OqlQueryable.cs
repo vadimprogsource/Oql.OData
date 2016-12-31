@@ -1,27 +1,51 @@
 ﻿using Oql.Linq.Api.Metadata;
-using Oql.Linq.Infrastructure.Syntax.Processors;
+using Oql.Linq.Api.Query;
+using Oql.Linq.Infrastructure.Syntax.Clauses;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Oql.Linq
 {
     public static class OqlQueryable
     {
+
+        private static IObjectQueryProcessor<T> Processor<T>(this IQueryable<T> query)
+        {
+            return (query.Provider as IObjectQueryProvider).CreateQueryProcessor(query);
+        }
+
+
         public static IQueryable<T> OrderBy<T>(this IQueryable<T> query, IExpression expression)
         {
-            return new OqlOrderProcessor().ProcessOrderBy(query, expression);
+            return query.Processor().ProcessOrderBy(expression);
         }
 
         public static IQueryable SelectFor<T>(this IQueryable<T> query, IExpression expression)
         {
-            return new OqlSelectProcessor().ProcessSelect( query , expression);
+            return query.Processor().ProcessSelect(expression);
         }
 
         public static IQueryable<T> FilterBy<T>(this IQueryable<T> query, IExpression expression)
         {
-            return new OqlFilterProcessor().ProcessFilterBy(query , expression);
+            return  query.Processor().ProcessWhere(expression);
         }
+
+
+        public static int Insert<TEntity,TResult>(this IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> expression)
+        {
+            return query.Provider.Execute<int>(OqlInsertClause.InsertInfo.Call<TEntity, TResult>(query.Expression, expression));
+        }
+
+        public static int Update<TEntity,TResult>(this IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> expression)
+        {
+            return query.Provider.Execute<int>(OqlUpdateClause.UpdateInfo.Call<TEntity, TResult>(query.Expression, expression));
+        }
+
+        public static int Delete<TEntity>(this IQueryable<TEntity> query)
+        {
+            return query.Provider.Execute<int>(OqlDeleteClause.DeleteInfo.Call<TEntity>(query.Expression));
+        }
+
     }
 }

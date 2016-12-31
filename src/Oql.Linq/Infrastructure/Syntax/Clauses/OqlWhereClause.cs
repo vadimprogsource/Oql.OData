@@ -42,7 +42,13 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
         public override IEnumerable<IMethodInfo> GetMethods()
         {
-            yield return new Method<IQueryable<object>>(x => x.Where(y => true));
+            yield return new Method<IQueryable<object>>(x => x.Where (y => true));
+            yield return new Method<IQueryable<object>>(x => x.First (y => true));
+            yield return new Method<IQueryable<object>>(x => x.Single(y => true));
+            yield return new Method<IQueryable<object>>(x => x.Last(y => true));
+            yield return new Method<IQueryable<object>>(x => x.FirstOrDefault (y => true));
+            yield return new Method<IQueryable<object>>(x => x.SingleOrDefault(y => true));
+            yield return new Method<IQueryable<object>>(x => x.LastOrDefault  (y => true));
         }
     }
 }

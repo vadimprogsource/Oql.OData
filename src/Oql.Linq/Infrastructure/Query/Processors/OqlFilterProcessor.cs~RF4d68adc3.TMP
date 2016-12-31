@@ -1,0 +1,58 @@
+﻿using Oql.Linq.Api.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+
+namespace Oql.Linq.Infrastructure.Query.Processors
+{
+    public class OqlFilterProcessor
+    {
+        private ConstantExpression GetConstant(IExpression x, Type t)
+        {
+            return Expression.Constant(Convert.ChangeType(x.Value, t), t);
+        }
+
+
+        private ExpressionType GetComparison(IExpression x)
+        {
+
+            if (x.Eq)
+            {
+                return ExpressionType.Equal;
+            }
+
+            if (x.Ne)
+            {
+                return ExpressionType.NotEqual;
+            }
+
+            if (x.Gt)
+            {
+                return ExpressionType.GreaterThan;
+            }
+
+            if (x.Ge)
+            {
+                return ExpressionType.GreaterThanOrEqual;
+            }
+
+
+            if (x.Lt)
+            {
+                return ExpressionType.GreaterThan;
+            }
+
+            if (x.Le)
+            {
+                return ExpressionType.GreaterThanOrEqual;
+            }
+
+            return ExpressionType.Equal;
+        }
+
+        
+
+    }
+}

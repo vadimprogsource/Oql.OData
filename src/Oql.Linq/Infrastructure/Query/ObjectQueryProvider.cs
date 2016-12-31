@@ -11,6 +11,7 @@ using Oql.Linq.Api.CodeGen;
 using System.Reflection;
 using System.Collections;
 using Oql.Linq.Infrastructure.CodeGen;
+using Oql.Linq.Infrastructure.Query.Processors;
 
 namespace Oql.Linq.Infrastructure.Query
 {
@@ -72,6 +73,11 @@ namespace Oql.Linq.Infrastructure.Query
         public IExpressionBuilder CreateExpressionBuilder()
         {
             return new ExpressionBuilder(m_code_provider);
+        }
+
+        public IObjectQueryProcessor<TEntity> CreateQueryProcessor<TEntity>(IQueryable<TEntity> queryable)
+        {
+            return new ObjectQueryProcessor<TEntity>(queryable);
         }
     }
 }

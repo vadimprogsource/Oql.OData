@@ -63,16 +63,16 @@ namespace Oql.Linq.Infrastructure.Syntax.Methods
         }
 
 
-        public IQueryable<T> Call<T>(IQueryable<T> left , LambdaExpression right)
+        public Expression Call<T>(Expression operand)
         {
-           return  left.Provider.CreateQuery<T>(Expression.Call(m_method_info.MakeGenericMethod(left.ElementType, right.Body.Type),left.Expression,right)); 
+            return Expression.Call(m_method_info.MakeGenericMethod(typeof(T)), operand);
         }
 
-
-        public Expression Call<T>(Expression left, LambdaExpression right)
+        public Expression Call<T,V>(Expression left, LambdaExpression right)
         {
-            return Expression.Call(m_method_info.MakeGenericMethod(typeof(T), right.Body.Type), left, right);
+            return Expression.Call(m_method_info.MakeGenericMethod(typeof(T),typeof(V)), left, Expression.Quote(right));
         }
+
 
     }
 

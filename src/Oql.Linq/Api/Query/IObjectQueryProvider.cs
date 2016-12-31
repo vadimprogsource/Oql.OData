@@ -17,5 +17,7 @@ namespace Oql.Linq.Api.Query
 
         IExpressionBuilder CreateExpressionBuilder();
 
+        IObjectQueryProcessor<TEntity> CreateQueryProcessor<TEntity>(IQueryable<TEntity> queryable);
+
     }
 }

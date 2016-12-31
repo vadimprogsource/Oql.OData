@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Oql.Linq.Infrastructure.Syntax.Processors
+namespace Oql.Linq.Infrastructure.Query.Processors
 {
 
 
@@ -24,14 +24,4 @@ namespace Oql.Linq.Infrastructure.Syntax.Processors
     }
 
 
-    public class OqlBaseProcessor
-    {
-        protected IQueryable ExecuteCommand(IQueryable query,Type commandType ,  LambdaExpression lambda)
-        {
-           return  (Activator.CreateInstance(commandType.MakeGenericType(query.ElementType, lambda.Body.Type)) as IOqlCommand).ExecuteCommand(query, lambda);
-        }
-
-
-      
-    }
 }
