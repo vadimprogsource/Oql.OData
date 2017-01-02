@@ -34,7 +34,7 @@ namespace Oql.Linq
 
         public static int Insert<TEntity,TResult>(this IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> expression)
         {
-            return query.Provider.Execute<int>(OqlInsertClause.InsertInfo.Call<TEntity, TResult>(query.Expression, expression));
+            return query.Provider.Execute<int>(OqlInsertClause.Insert.Call<TEntity, TResult>(query.Expression, expression));
         }
 
         public static int Update<TEntity,TResult>(this IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> expression)
@@ -44,7 +44,7 @@ namespace Oql.Linq
 
         public static int Delete<TEntity>(this IQueryable<TEntity> query)
         {
-            return query.Provider.Execute<int>(OqlDeleteClause.DeleteInfo.Call<TEntity>(query.Expression));
+            return query.Provider.Execute<int>(OqlDeleteClause.Delete.Call<TEntity>(query.Expression));
         }
 
     }

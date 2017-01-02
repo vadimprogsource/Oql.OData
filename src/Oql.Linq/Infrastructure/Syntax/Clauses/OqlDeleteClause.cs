@@ -10,7 +10,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
     public class OqlDeleteClause : OqlBaseClause
     {
-        internal static Method DeleteInfo = new Method<IQueryable<object>>(x => x.Delete());
+        internal static Method Delete = new Method<IQueryable<object>>(x => x.Delete());
 
         public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {

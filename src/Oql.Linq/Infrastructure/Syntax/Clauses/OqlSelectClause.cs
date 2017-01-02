@@ -34,7 +34,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             }
 
 
-            m_select_expression = methodCall.Arguments[1];
+            m_select_expression = methodCall.GetArgument(1);
 
 
             if (m_select_expression.NodeType == ExpressionType.MemberInit || m_select_expression.NodeType == ExpressionType.New)

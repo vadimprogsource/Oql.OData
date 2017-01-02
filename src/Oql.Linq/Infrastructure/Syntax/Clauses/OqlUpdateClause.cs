@@ -17,7 +17,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
         public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
-            m_member_init = methodCall.Arguments.OfType<MemberInitExpression>().ElementAt(1);
+            m_member_init = methodCall.GetArgument(1) as MemberInitExpression;
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)

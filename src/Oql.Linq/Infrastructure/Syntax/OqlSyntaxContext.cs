@@ -101,7 +101,6 @@ namespace Oql.Linq.Infrastructure.Syntax
                 if (clause != null)
                 {
                     clause.ProcessMethodCall(this, methodCall);
-                    return caller.Visit(methodCall.Arguments[0]);
                 }
 
                 IOqlMethodCallFormatter formatter = methodEntry.Formatter;
@@ -109,10 +108,11 @@ namespace Oql.Linq.Infrastructure.Syntax
                 if (formatter != null)
                 {
                     formatter.FormatMethodCall(caller, methodCall);
+                    return methodCall;
                 }
             }
 
-            return methodCall;
+             return caller.Visit(methodCall.Arguments[0]);
         }
 
         public IOqlSyntaxContext InitializeFor(Expression expression)
@@ -122,7 +122,7 @@ namespace Oql.Linq.Infrastructure.Syntax
             {
                 MethodCallExpression methodCall = expression as MethodCallExpression;
 
-                if (methodCall.IsCalled(OqlInsertClause.InsertInfo))
+                if (methodCall.IsCalled(OqlInsertClause.Insert))
                 {
                     m_call_result.IsModifier = true;
                     return ForInsert();
@@ -134,7 +134,7 @@ namespace Oql.Linq.Infrastructure.Syntax
                     return ForUpdate();
                 }
 
-                if (methodCall.IsCalled(OqlDeleteClause.DeleteInfo))
+                if (methodCall.IsCalled(OqlDeleteClause.Delete))
                 {
                     m_call_result.IsModifier = true;
                     return ForDelete();

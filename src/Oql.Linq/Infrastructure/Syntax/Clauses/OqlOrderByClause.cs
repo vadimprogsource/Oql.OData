@@ -8,65 +8,69 @@ using Oql.Linq.Infrastructure.Syntax.Methods;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
-    public class OqlOrderByClause : OqlStackClause
+    public class OqlOrderByClause : OqlBaseClause
     {
 
-        public static Method OrderByInfo           = new Method<IOrderedQueryable<object>>(x => x.OrderBy(y => y.GetHashCode()));
-        public static Method ThenByInfo            = new Method<IOrderedQueryable<object>>(x => x.ThenBy (y => y.GetHashCode()));
-        public static Method OrderByDescendingInfo = new Method<IOrderedQueryable<object>>(x => x.OrderByDescending(y => y.GetHashCode()));
-        public static Method ThenByDescendingInfo  = new Method<IOrderedQueryable<object>>(x => x.ThenByDescending(y => y.GetHashCode()));
+        public static Method OrderBy           = new Method<IOrderedQueryable<object>>(x => x.OrderBy(y => y.GetHashCode()));
+        public static Method ThenBy            = new Method<IOrderedQueryable<object>>(x => x.ThenBy (y => y.GetHashCode()));
+        public static Method OrderByDescending = new Method<IOrderedQueryable<object>>(x => x.OrderByDescending(y => y.GetHashCode()));
+        public static Method ThenByDescending  = new Method<IOrderedQueryable<object>>(x => x.ThenByDescending(y => y.GetHashCode()));
+
+
+        private Stack<MethodCallExpression> m_order_stack = new Stack<MethodCallExpression>();
 
 
         public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
-            Push(methodCall.Method, methodCall.Arguments[1]);
+            m_order_stack.Push(methodCall);
         }
 
 
         public override IEnumerable<IMethodInfo> GetMethods()
         {
-            yield return OrderByInfo;
-            yield return ThenByInfo;
-            yield return OrderByDescendingInfo;
-            yield return ThenByDescendingInfo;
+            yield return OrderBy;
+            yield return ThenBy;
+            yield return OrderByDescending;
+            yield return ThenByDescending;
        }
 
 
-        protected virtual void VisitForAsc(IOqlExpressionVisitor visitor, Expression expression)
+        protected virtual void VisitOrderBy(IOqlExpressionVisitor visitor,MethodCallExpression methodCall)
         {
-            visitor.Visit(expression);
-            visitor.Query.AppendAsc();
-        }
+            visitor.Visit(methodCall.GetArgument(1));
 
 
-        protected virtual void VisitForDesc(IOqlExpressionVisitor visitor, Expression expression)
-        {
-            visitor.Visit(expression);
-            visitor.Query.AppendDesc();
-        }
-
-
-        protected override void PopVisit(IOqlExpressionVisitor visitor, MethodInfo method, Expression expression)
-        {
-            if (OrderByInfo.Equals(method) || ThenByInfo.Equals(method))
+            if (methodCall.IsCalledOr(OrderBy, ThenBy))
             {
-                VisitForAsc(visitor, expression);
+
+                visitor.Query.AppendAsc();
                 return;
             }
 
-            VisitForDesc(visitor, expression);
+
+            if (methodCall.IsCalledOr(OrderByDescending, ThenByDescending))
+            {
+                visitor.Query.AppendDesc();
+            }
+
+
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
         {
-            if (IsEmpty)
+
+            if (m_order_stack.Count > 0)
             {
-                return;
+                visitor.Query.AppendOrderBy();
+
+                VisitOrderBy(visitor,m_order_stack.Pop());
+
+                while (m_order_stack.Count > 0)
+                {
+                    visitor.Query.AppendExpressionSeparator();
+                    VisitOrderBy(visitor, m_order_stack.Pop());
+                }
             }
-
-            visitor.Query.AppendOrderBy();
-
-            base.VisitTo(visitor);
         }
     }
 }

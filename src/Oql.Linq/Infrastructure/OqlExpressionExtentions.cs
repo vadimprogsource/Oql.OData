@@ -74,6 +74,12 @@ namespace Oql.Linq.Infrastructure
         }
 
 
+        public static Expression GetArgument(this MethodCallExpression @this,int index)
+        {
+            return @this.Arguments[index].GetInnerExpression();
+        }
+
+
         public static IEnumerable<IExpression> GetIterator(this IExpression @this)
         {
             for (IExpression x = @this; x != null; x = x.Expression)

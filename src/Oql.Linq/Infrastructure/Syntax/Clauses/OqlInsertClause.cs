@@ -11,14 +11,14 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     public class OqlInsertClause : OqlBaseClause
     {
 
-        internal static Method InsertInfo = new Method<IQueryable<object>>(x => x.Insert(y => y));
+        internal static Method Insert = new Method<IQueryable<object>>(x => x.Insert(y => y));
 
 
         private MemberInitExpression m_init_expression;
 
         public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
-            m_init_expression = methodCall.Arguments.OfType<MemberInitExpression>().ElementAt(1);
+            m_init_expression = methodCall.GetArgument(1) as MemberInitExpression;
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)

@@ -10,8 +10,8 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     public class OqlWhereClause : OqlBaseClause
     {
 
-        private static Method Where     = new Method<IQueryable<object>>(x => x.SkipWhile(y => false));
-        private static Method SkipWhile = new Method<IQueryable<object>>(x => x.SkipWhile(y => false));
+        private static Method Where     = new Method<IQueryable<object>>(x => x.Where(y => true));
+        private static Method SkipWhile = new Method<IQueryable<object>>(x => x.SkipWhile(y => true));
 
 
 
@@ -25,11 +25,11 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         {
             if (m_expression == null)
             {
-                m_expression = expression.GetInnerExpression();
+                m_expression = expression;
                 return;
             }
 
-            m_expression = Expression.AndAlso(m_expression, expression.GetInnerExpression());
+            m_expression = Expression.AndAlso(m_expression, expression);
         }
 
         public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
@@ -37,11 +37,11 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
             if (methodCall.IsCalled(SkipWhile))
             {
-                AndAlso(Expression.Not(methodCall.Arguments[1]));
+                AndAlso(Expression.Not(methodCall.GetArgument(1)));
                 return;
             }
 
-            AndAlso(methodCall.Arguments[1]);
+            AndAlso(methodCall.GetArgument(1));
 
             OqlNavigationClause.ProcessNavigate(callContext, methodCall);
 
