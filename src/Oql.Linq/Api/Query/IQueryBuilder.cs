@@ -24,6 +24,7 @@ namespace Oql.Linq.Api
         IQueryBuilder AppendAndAlso();
         IQueryBuilder AppendOrElse();
         IQueryBuilder AppendNot();
+        IQueryBuilder AppendSet();
         IQueryBuilder AppendPlus();
         IQueryBuilder AppendNegate();
         IQueryBuilder AppendAdd();
@@ -52,7 +53,15 @@ namespace Oql.Linq.Api
         IQueryBuilder AppendDistinct();
         IQueryBuilder AppendAsc();
         IQueryBuilder AppendDesc();
-
-
+        IQueryBuilder AppendMax();
+        IQueryBuilder AppendMin();
+        IQueryBuilder AppendAvg();
+        IQueryBuilder AppendSum();
+        IQueryBuilder AppendCount();
+        IQueryBuilder AppendInsert();
+        IQueryBuilder AppendUpdate();
+        IQueryBuilder AppendDelete();
+        IQueryBuilder AppendAssign();
+        IQueryBuilder AppendValues();
     }
 }

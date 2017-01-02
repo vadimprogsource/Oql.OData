@@ -59,10 +59,21 @@ namespace Oql.Linq.Infrastructure.Query
 
         public object Execute(Expression expression)
         {
+            IOqlExpressionVisitor visitor = m_data_provider.CreateExpressionVisitor().ExecuteVisit(expression);
 
-            IOqlExpressionVisitor visitor = m_data_provider.CreateExpressionVisitor();
-            visitor.VisitAndBuild(expression);
-            return Activator.CreateInstance(typeof(ObjectQueryIterator<>).MakeGenericType(visitor.ResulType), m_data_provider.GetDataSource(), visitor.Query);
+            if (visitor.Context.CallResult.IsModifier)
+            {
+                return m_data_provider.GetDataSource().ExecuteCommand(visitor.Query);
+            }
+
+
+            if(visitor.Context.CallResult.IsScalar)
+            {
+                return m_data_provider.GetDataSource().GetScalar(visitor.Query);
+            }
+
+
+            return Activator.CreateInstance(typeof(ObjectQueryIterator<>).MakeGenericType(visitor.Context.CallResult.ResultType), m_data_provider.GetDataSource(), visitor.Query);
         }
 
         public TResult Execute<TResult>(Expression expression)

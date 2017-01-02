@@ -10,13 +10,13 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     public class OqlFromClause : OqlBaseClause 
     {
     
-        public override void AddMethodCall(MethodCallExpression methodCall)
+        public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
         {
-            visitor.Query.AppendFrom().AppendType(visitor.BaseEntityType);
+            visitor.Query.AppendFrom().AppendType(visitor.SourceType);
         }
     }
 }

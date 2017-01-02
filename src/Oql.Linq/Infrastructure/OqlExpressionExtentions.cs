@@ -81,5 +81,35 @@ namespace Oql.Linq.Infrastructure
                 yield return x;
             }
         }
+
+        public static MethodInfo GetBaseMethod(this MethodInfo @this)
+        {
+            return @this.IsGenericMethod ? @this.GetGenericMethodDefinition() : @this;
+        }
+
+       
+
+
+        public static bool IsCalled(this MethodCallExpression @this, string methodName)
+        {
+            return string.Compare(@this.Method.Name, methodName, false)==0;
+        }
+
+        public static bool IsCalled(this MethodCallExpression @this, IMethodInfo method)
+        {
+            return ReferenceEquals(@this.Method.GetBaseMethod() , method.GetMethodInfo().GetBaseMethod());
+        }
+
+        public static bool IsCalledOr(this MethodCallExpression @this, params IMethodInfo[] methods)
+        {
+            foreach (IMethodInfo m in methods)
+            {
+                if (@this.IsCalled(m)) return true;
+            }
+
+            return false;
+        }
+
+
     }
 }

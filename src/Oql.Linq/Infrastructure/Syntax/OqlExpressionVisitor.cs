@@ -9,13 +9,13 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
     public class OqlExpressionVisitor : ExpressionVisitor, IOqlExpressionVisitor
     {
 
-        private IOqlSyntaxContext m_syntax_provider;
-        private IQueryBuilder      m_query_builder;
+        private IOqlSyntaxContext m_syntax_context;
+        private IQueryBuilder     m_query_builder ;
 
 
         public OqlExpressionVisitor(IOqlSyntaxContext provider)
         {
-            m_syntax_provider = provider;
+            m_syntax_context = provider;
             m_query_builder   = provider.CreateQueryBuilder();
         }
 
@@ -31,12 +31,11 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
         {
             get
             {
-                return m_syntax_provider;
+                return m_syntax_context;
             }
         }
 
-        public Type BaseEntityType { get; private set; }
-        public Type ResulType      { get; set; }
+        public Type SourceType { get; private set; }
 
        
         protected override Expression VisitBinary(BinaryExpression node)
@@ -44,33 +43,33 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
             switch (node.NodeType)
             {
                #region Comparison
-                 case ExpressionType.Equal             : m_syntax_provider.ComparisonFormatter.FormatEqual   (this, node.Left, node.Right); break;
-                 case ExpressionType.NotEqual          : m_syntax_provider.ComparisonFormatter.FormatNotEqual(this, node.Left, node.Right); break;
-                 case ExpressionType.GreaterThan       : m_syntax_provider.ComparisonFormatter.FormatGreaterThan(this, node.Left, node.Right); break;
-                 case ExpressionType.GreaterThanOrEqual: m_syntax_provider.ComparisonFormatter.FormatGreaterThanOrEqual(this, node.Left, node.Right); break;
-                 case ExpressionType.LessThan          : m_syntax_provider.ComparisonFormatter.FormatLessThan(this, node.Left, node.Right);  break;
-                 case ExpressionType.LessThanOrEqual   : m_syntax_provider.ComparisonFormatter.FormatLessThanOrEqual(this, node.Left, node.Right); break;
+                 case ExpressionType.Equal             : m_syntax_context.ComparisonFormatter.FormatEqual   (this, node.Left, node.Right); break;
+                 case ExpressionType.NotEqual          : m_syntax_context.ComparisonFormatter.FormatNotEqual(this, node.Left, node.Right); break;
+                 case ExpressionType.GreaterThan       : m_syntax_context.ComparisonFormatter.FormatGreaterThan(this, node.Left, node.Right); break;
+                 case ExpressionType.GreaterThanOrEqual: m_syntax_context.ComparisonFormatter.FormatGreaterThanOrEqual(this, node.Left, node.Right); break;
+                 case ExpressionType.LessThan          : m_syntax_context.ComparisonFormatter.FormatLessThan(this, node.Left, node.Right);  break;
+                 case ExpressionType.LessThanOrEqual   : m_syntax_context.ComparisonFormatter.FormatLessThanOrEqual(this, node.Left, node.Right); break;
                 #endregion
 
                 #region Boolean
-                 case ExpressionType.AndAlso : m_syntax_provider.BooleanFormatter.FormatAndAlso(this,node.Left, node.Right); break;
-                 case ExpressionType.OrElse : m_syntax_provider.BooleanFormatter.FormatOrElse (this,node.Left, node.Right); break;
+                 case ExpressionType.AndAlso : m_syntax_context.BooleanFormatter.FormatAndAlso(this,node.Left, node.Right); break;
+                 case ExpressionType.OrElse : m_syntax_context.BooleanFormatter.FormatOrElse (this,node.Left, node.Right); break;
                #endregion
 
                 #region Bitwise
-                 case ExpressionType.And        : m_syntax_provider.BitwiseFormatter.FormatAnd         (this, node.Left, node.Right); break;
-                 case ExpressionType.Or         : m_syntax_provider.BitwiseFormatter.FormatOr          (this, node.Left, node.Right); break;
-                 case ExpressionType.ExclusiveOr: m_syntax_provider.BitwiseFormatter.FormatExclusiveOr (this, node.Left, node.Right); break;
+                 case ExpressionType.And        : m_syntax_context.BitwiseFormatter.FormatAnd         (this, node.Left, node.Right); break;
+                 case ExpressionType.Or         : m_syntax_context.BitwiseFormatter.FormatOr          (this, node.Left, node.Right); break;
+                 case ExpressionType.ExclusiveOr: m_syntax_context.BitwiseFormatter.FormatExclusiveOr (this, node.Left, node.Right); break;
                 #endregion
 
                 #region Math
-                 case ExpressionType.Add                  : m_syntax_provider.MathFormatter.FormatAdd                  (this, node.Left, node.Right);break;
-                 case ExpressionType.AddChecked           : m_syntax_provider.MathFormatter.FormatAddChecked           (this, node.Left, node.Right);break;
-                 case ExpressionType.Subtract             : m_syntax_provider.MathFormatter.FormatSubtract             (this, node.Left, node.Right);break;
-                 case ExpressionType.SubtractChecked      : m_syntax_provider.MathFormatter.FormatSubtractChecked      (this, node.Left, node.Right);break;
-                 case ExpressionType.Multiply             : m_syntax_provider.MathFormatter.FormatMultiply             (this, node.Left, node.Right);break;
-                 case ExpressionType.MultiplyAssignChecked: m_syntax_provider.MathFormatter.FormatMultiplyAssignChecked(this, node.Left, node.Right);break;
-                 case ExpressionType.Divide               : m_syntax_provider.MathFormatter.FormatDivide               (this, node.Left, node.Right);break;
+                 case ExpressionType.Add                  : m_syntax_context.MathFormatter.FormatAdd                  (this, node.Left, node.Right);break;
+                 case ExpressionType.AddChecked           : m_syntax_context.MathFormatter.FormatAddChecked           (this, node.Left, node.Right);break;
+                 case ExpressionType.Subtract             : m_syntax_context.MathFormatter.FormatSubtract             (this, node.Left, node.Right);break;
+                 case ExpressionType.SubtractChecked      : m_syntax_context.MathFormatter.FormatSubtractChecked      (this, node.Left, node.Right);break;
+                 case ExpressionType.Multiply             : m_syntax_context.MathFormatter.FormatMultiply             (this, node.Left, node.Right);break;
+                 case ExpressionType.MultiplyAssignChecked: m_syntax_context.MathFormatter.FormatMultiplyAssignChecked(this, node.Left, node.Right);break;
+                 case ExpressionType.Divide               : m_syntax_context.MathFormatter.FormatDivide               (this, node.Left, node.Right);break;
                #endregion
 
             }
@@ -85,11 +84,11 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
             switch (node.NodeType)
             {
-                case ExpressionType.Negate: m_syntax_provider.MathFormatter.FormatNegate(this, node.Operand); break;
-                case ExpressionType.NegateChecked: m_syntax_provider.MathFormatter.FormatNegate(this, node.Operand); break;
-                case ExpressionType.Not: m_syntax_provider.BooleanFormatter.FormatNot(this, node.Operand); break;
+                case ExpressionType.Negate: m_syntax_context.MathFormatter.FormatNegate(this, node.Operand); break;
+                case ExpressionType.NegateChecked: m_syntax_context.MathFormatter.FormatNegate(this, node.Operand); break;
+                case ExpressionType.Not: m_syntax_context.BooleanFormatter.FormatNot(this, node.Operand); break;
                 case ExpressionType.Quote: return Visit(node.Operand);
-                case ExpressionType.UnaryPlus: m_syntax_provider.MathFormatter.FormatUnaryPlus(this, node.Operand); break;
+                case ExpressionType.UnaryPlus: m_syntax_context.MathFormatter.FormatUnaryPlus(this, node.Operand); break;
 
                 case ExpressionType.Convert:
                 case ExpressionType.ConvertChecked:
@@ -164,8 +163,8 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
             if (value is IQueryable)
             {
-                BaseEntityType = (value as IQueryable).ElementType;
-                ResulType      = BaseEntityType;
+                SourceType = (value as IQueryable).ElementType;
+                m_syntax_context.CallResult.ResultType = SourceType;
                 return node;
             }
 
@@ -176,28 +175,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-
-            IOqlMethodCallEntry methodCall = m_syntax_provider[node];
-
-            if (methodCall == null)
-            {
-                return VisitMethodCall(node);
-            }
-
-
-            if (methodCall.Clause != null)
-            {
-                methodCall.Clause.AddMethodCall(node);
-                return Visit(node.Arguments[0]);
-            }
-
-            if (methodCall.Formatter != null)
-            {
-                methodCall.Formatter.FormatMethodCall(this,node);
-            }
-
-            return node;
-
+            return m_syntax_context.ProcessMethodCall(this, node);
         }
 
 
@@ -230,15 +208,12 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
         protected override Expression VisitNew(NewExpression node)
         {
 
+            Visit(node.Arguments.First());
 
-            for (int i = 0; i < node.Arguments.Count; i++)
+            foreach (Expression x in node.Arguments.Skip(1))
             {
-                if (i > 0)
-                {
-                    Query.AppendExpressionSeparator();
-                }
-
-                Visit(node.Arguments[i]);
+                Query.AppendExpressionSeparator();
+                Visit(x);
             }
 
             return node;
@@ -247,21 +222,19 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
         protected override Expression VisitMemberInit(MemberInitExpression node)
         {
-            ResulType = node.NewExpression.Type; 
+            m_syntax_context.CallResult.ResultType = node.NewExpression.Type; 
 
             if (node.NewExpression.Arguments.Count > 0)
             {
                 return VisitNew(node.NewExpression);
             }
 
-            for (int i = 0; i < node.Bindings.Count; i++)
-            {
-                if (i > 0)
-                {
-                    Query.AppendExpressionSeparator();
-                }
+            Visit(node.Bindings.OfType<MemberAssignment>().First().Expression);
 
-                Visit((node.Bindings[i] as MemberAssignment).Expression);
+            foreach (MemberAssignment x in node.Bindings.Skip(1))
+            {
+                m_query_builder.AppendExpressionSeparator();
+                Visit(x.Expression);
             }
 
             return node;
@@ -270,29 +243,27 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
         public override string ToString()
         {
-            Build();
+            MakeQuery();
             return Query.ToString();
         }
 
 
-        public IQueryBuilder Build()
+        protected IOqlExpressionVisitor MakeQuery()
         {
-            Query.Clear();
+            m_query_builder.Clear();
 
-            foreach (IOqlClause clause in m_syntax_provider.Clauses)
+            foreach (IOqlClause clause in m_syntax_context.Clauses)
             {
                 clause.VisitTo(this);
             }
-
-            return m_query_builder;
-
-           
+            return this;
         }
 
-        public IQueryBuilder VisitAndBuild(Expression expression)
+        public IOqlExpressionVisitor ExecuteVisit(Expression expression)
         {
+            m_syntax_context.InitializeFor(expression);
             Visit(expression);
-            return Build();
+            return MakeQuery();
         }
     }
 

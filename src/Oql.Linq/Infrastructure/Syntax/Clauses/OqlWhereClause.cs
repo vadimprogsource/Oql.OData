@@ -9,6 +9,13 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
     public class OqlWhereClause : OqlBaseClause
     {
+
+        private static Method Where     = new Method<IQueryable<object>>(x => x.SkipWhile(y => false));
+        private static Method SkipWhile = new Method<IQueryable<object>>(x => x.SkipWhile(y => false));
+
+
+
+
         private Expression m_expression;
 
 
@@ -25,9 +32,19 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             m_expression = Expression.AndAlso(m_expression, expression.GetInnerExpression());
         }
 
-        public override void AddMethodCall(MethodCallExpression methodCall)
+        public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
+
+            if (methodCall.IsCalled(SkipWhile))
+            {
+                AndAlso(Expression.Not(methodCall.Arguments[1]));
+                return;
+            }
+
             AndAlso(methodCall.Arguments[1]);
+
+            OqlNavigationClause.ProcessNavigate(callContext, methodCall);
+
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
@@ -42,13 +59,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
         public override IEnumerable<IMethodInfo> GetMethods()
         {
-            yield return new Method<IQueryable<object>>(x => x.Where (y => true));
-            yield return new Method<IQueryable<object>>(x => x.First (y => true));
-            yield return new Method<IQueryable<object>>(x => x.Single(y => true));
-            yield return new Method<IQueryable<object>>(x => x.Last(y => true));
-            yield return new Method<IQueryable<object>>(x => x.FirstOrDefault (y => true));
-            yield return new Method<IQueryable<object>>(x => x.SingleOrDefault(y => true));
-            yield return new Method<IQueryable<object>>(x => x.LastOrDefault  (y => true));
+            return new[] { Where, SkipWhile }.Union(OqlNavigationClause.WithPredicates());
         }
     }
 }

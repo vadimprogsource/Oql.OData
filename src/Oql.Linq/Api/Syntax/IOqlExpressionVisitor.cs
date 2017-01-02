@@ -8,15 +8,14 @@ namespace Oql.Linq.Api.Syntax
 {
     public interface IOqlExpressionVisitor
     {
-        Type BaseEntityType { get;  }
-        Type ResulType      { get; set; }
+        Type SourceType { get;  }
 
         IOqlSyntaxContext  Context { get; }
         IQueryBuilder       Query  { get; }
         Expression Visit(Expression expression);
         void VisitSearchPattern(bool hasBeginWildCard, Expression expression, bool hasEndWildCard);
 
-        IQueryBuilder VisitAndBuild(Expression expression);
+        IOqlExpressionVisitor ExecuteVisit(Expression expression);
     }
 
 }

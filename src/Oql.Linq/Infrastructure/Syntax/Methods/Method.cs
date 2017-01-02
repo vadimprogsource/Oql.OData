@@ -12,6 +12,12 @@ namespace Oql.Linq.Infrastructure.Syntax.Methods
     public class Method : IMethodInfo
     {
 
+        public static IEnumerable<Method> GetMethodsByName(Type type, string methodName)
+        {
+            return type.GetMember(methodName).Where(x => x.MemberType == MemberTypes.Method).Select(x => new Method(x as MethodInfo));
+        }
+
+
         public static MethodInfo GetKeyMethod(MethodInfo m)
         {
             if (m.IsGenericMethod)
@@ -55,6 +61,9 @@ namespace Oql.Linq.Infrastructure.Syntax.Methods
 
             return false; 
         }
+
+
+
 
 
         public override int GetHashCode()

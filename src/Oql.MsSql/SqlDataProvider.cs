@@ -29,7 +29,7 @@ namespace Oql.MsSql
 
         public IOqlExpressionVisitor CreateExpressionVisitor()
         {
-            return new OqlExpressionVisitor(new SqlSyntaxContext().ForSelect());
+            return new OqlExpressionVisitor(new SqlSyntaxContext());
         }
 
         private string m_connection_string;

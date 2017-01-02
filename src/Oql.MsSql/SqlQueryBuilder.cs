@@ -310,5 +310,71 @@ namespace Oql.MsSql
             sql.Append(" DESC ");
             return this;
         }
+
+        public IQueryBuilder AppendMax()
+        {
+            sql.Append("MAX");
+            return this;
+        }
+
+        public IQueryBuilder AppendMin()
+        {
+            sql.Append("MIN");
+            return this;
+        }
+
+        public IQueryBuilder AppendAvg()
+        {
+            sql.Append("AVG");
+            return this;
+        }
+
+        public IQueryBuilder AppendSum()
+        {
+            sql.Append("SUM");
+            return this;
+        }
+
+        public IQueryBuilder AppendCount()
+        {
+            sql.Append("COUNT");
+            return this;
+        }
+
+        public IQueryBuilder AppendInsert()
+        {
+            sql.Append("INSERT INTO");
+            return this;
+        }
+
+        public IQueryBuilder AppendUpdate()
+        {
+            sql.Append("UPDATE");
+            return this;
+        }
+
+        public IQueryBuilder AppendDelete()
+        {
+            sql.Append("DELETE");
+            return this;
+        }
+
+        public IQueryBuilder AppendSet()
+        {
+            sql.Append("SET");
+            return this;
+        }
+
+        public IQueryBuilder AppendAssign()
+        {
+            sql.Append('=');
+            return this;
+        }
+
+        public IQueryBuilder AppendValues()
+        {
+            sql.Append("VALUES");
+            return this;
+        }
     }
 }

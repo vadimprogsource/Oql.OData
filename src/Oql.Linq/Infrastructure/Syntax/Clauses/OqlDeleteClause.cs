@@ -12,14 +12,14 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     {
         internal static Method DeleteInfo = new Method<IQueryable<object>>(x => x.Delete());
 
-        public override void AddMethodCall(MethodCallExpression methodCall)
+        public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
         {
-            throw new NotImplementedException();
+            visitor.Query.AppendDelete().AppendBlank();
         }
     }
 }

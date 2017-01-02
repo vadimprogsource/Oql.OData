@@ -9,14 +9,21 @@ namespace Oql.Linq.Api.Syntax
 {
     public interface IOqlSyntaxContext
     {
+
+        IOqlSyntaxContext InitializeFor(Expression expression);
+
+        IAggregateFormatter AggregateFormatter { get; }
         IOqlBitwiseFormatter    BitwiseFormatter { get; }
         IOqlBooleanFormatter    BooleanFormatter { get; }
         IOqlComparisonFormatter ComparisonFormatter { get; }
         IOqlMathFormatter        MathFormatter { get; }
-        IOqlTakeByClause Taken { get; set; }
         IOqlMethodCallEntry this[MethodCallExpression methodCall] { get; }
         IEnumerable<IOqlClause> Clauses { get; }
 
         IQueryBuilder CreateQueryBuilder();
+
+        IOqlCallResult CallResult { get; }
+
+        Expression ProcessMethodCall(IOqlExpressionVisitor caller ,  MethodCallExpression methodCall);
     }
 }

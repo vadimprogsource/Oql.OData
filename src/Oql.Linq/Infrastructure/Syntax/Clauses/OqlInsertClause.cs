@@ -11,16 +11,48 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     public class OqlInsertClause : OqlBaseClause
     {
 
-        internal static Method InsertInfo = new Method<IQueryable<object>>(x => x.Insert(y => y)); 
+        internal static Method InsertInfo = new Method<IQueryable<object>>(x => x.Insert(y => y));
 
-        public override void AddMethodCall(MethodCallExpression methodCall)
+
+        private MemberInitExpression m_init_expression;
+
+        public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
-            throw new NotImplementedException();
+            m_init_expression = methodCall.Arguments.OfType<MemberInitExpression>().ElementAt(1);
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
         {
-            throw new NotImplementedException();
+
+            visitor.Query.AppendInsert().AppendType(visitor.SourceType).AppendBeginExpression();
+
+            Expression[] vals = new Expression[m_init_expression.Bindings.Count];
+
+            for (int i = 0; i < vals.Length; i++)
+            {
+                MemberAssignment ma = m_init_expression.Bindings[i] as MemberAssignment;
+
+                vals[i] = ma.Expression;
+
+                if (i > 0)
+                {
+                    visitor.Query.AppendExpressionSeparator();
+                }
+
+                visitor.Query.AppendMember(ma.Member);
+            }
+
+            visitor.Query.AppendEndExpression().AppendValues().AppendBeginExpression();
+
+            visitor.Visit(vals.First());
+
+            foreach(Expression x in vals.Skip(1))
+            {
+                visitor.Query.AppendExpressionSeparator();
+                visitor.Visit(x);
+            }
+
+            visitor.Query.AppendEndExpression();
         }
     }
 }

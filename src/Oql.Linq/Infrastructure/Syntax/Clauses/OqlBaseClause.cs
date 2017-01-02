@@ -29,13 +29,15 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             }
         }
 
-        public abstract void AddMethodCall(MethodCallExpression methodCall);
+
+        public abstract void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall);
+       
 
         public virtual IEnumerable<IMethodInfo> GetMethods()
         {
             return Enumerable.Empty<IMethodInfo>();
         }
-
+        
         public abstract void VisitTo      (IOqlExpressionVisitor visitor);
        
     }

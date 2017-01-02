@@ -17,7 +17,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         public static Method ThenByDescendingInfo  = new Method<IOrderedQueryable<object>>(x => x.ThenByDescending(y => y.GetHashCode()));
 
 
-        public override void AddMethodCall(MethodCallExpression methodCall)
+        public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
             Push(methodCall.Method, methodCall.Arguments[1]);
         }
