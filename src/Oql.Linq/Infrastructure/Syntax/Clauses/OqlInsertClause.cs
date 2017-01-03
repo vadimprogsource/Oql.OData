@@ -7,13 +7,14 @@ using Oql.Linq.Api.Syntax;
 using Oql.Linq.Infrastructure.Syntax.Methods;
 using Oql.Linq.Api.Data;
 using Oql.Linq.Infrastructure.Data;
+using Oql.Linq.Api.Metadata;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
     public class OqlInsertClause : OqlBaseClause
     {
 
-        internal static Method Insert = new Method<IQueryable<object>>(x => x.Insert(y => y));
+        internal static IMethod Insert = new Method<IQueryable<object>>(x => x.Insert(y => y));
 
         private IDataChangeSet m_change_set;
 

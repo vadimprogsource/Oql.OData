@@ -33,7 +33,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
         }
 
 
-        public override IEnumerable<IMethodInfo> GetMethods()
+        public override IEnumerable<IMethod> GetMethods()
         {
             yield return new Method<string>             (x => x.Contains(string.Empty));
             yield return new Method<IEnumerable<object>>(x=>x.Contains(string.Empty));

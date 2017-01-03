@@ -11,10 +11,10 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     public class OqlOrderByClause : OqlBaseClause
     {
 
-        public static Method OrderBy           = new Method<IOrderedQueryable<object>>(x => x.OrderBy(y => y.GetHashCode()));
-        public static Method ThenBy            = new Method<IOrderedQueryable<object>>(x => x.ThenBy (y => y.GetHashCode()));
-        public static Method OrderByDescending = new Method<IOrderedQueryable<object>>(x => x.OrderByDescending(y => y.GetHashCode()));
-        public static Method ThenByDescending  = new Method<IOrderedQueryable<object>>(x => x.ThenByDescending(y => y.GetHashCode()));
+        public static IMethod OrderBy           = new Method<IOrderedQueryable<object>>(x => x.OrderBy(y => y.GetHashCode()));
+        public static IMethod ThenBy            = new Method<IOrderedQueryable<object>>(x => x.ThenBy (y => y.GetHashCode()));
+        public static IMethod OrderByDescending = new Method<IOrderedQueryable<object>>(x => x.OrderByDescending(y => y.GetHashCode()));
+        public static IMethod ThenByDescending  = new Method<IOrderedQueryable<object>>(x => x.ThenByDescending(y => y.GetHashCode()));
 
 
         private Stack<MethodCallExpression> m_order_stack = new Stack<MethodCallExpression>();
@@ -26,7 +26,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         }
 
 
-        public override IEnumerable<IMethodInfo> GetMethods()
+        public override IEnumerable<IMethod> GetMethods()
         {
             yield return OrderBy;
             yield return ThenBy;

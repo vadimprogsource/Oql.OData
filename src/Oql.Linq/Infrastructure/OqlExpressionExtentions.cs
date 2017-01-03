@@ -101,14 +101,14 @@ namespace Oql.Linq.Infrastructure
             return string.Compare(@this.Method.Name, methodName, false)==0;
         }
 
-        public static bool IsCalled(this MethodCallExpression @this, IMethodInfo method)
+        public static bool IsCalled(this MethodCallExpression @this, IMethod method)
         {
             return ReferenceEquals(@this.Method.GetBaseMethod() , method.GetMethodInfo().GetBaseMethod());
         }
 
-        public static bool IsCalledOr(this MethodCallExpression @this, params IMethodInfo[] methods)
+        public static bool IsCalledOr(this MethodCallExpression @this, params IMethod[] methods)
         {
-            foreach (IMethodInfo m in methods)
+            foreach (IMethod m in methods)
             {
                 if (@this.IsCalled(m)) return true;
             }

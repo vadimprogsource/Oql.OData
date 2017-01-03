@@ -12,12 +12,12 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     public class OqlSelectClause : OqlBaseClause
     {
 
-        public  Method Select    = new Method<IQueryable<object>>(x => x.Select(y => new object()));
-        private Method Distinct  = new Method<IQueryable<object>>(x => x.Distinct());
-        private Method Min       = new Method<IQueryable<object>>(x => x.Min(y => 1));
-        private Method Max       = new Method<IQueryable<object>>(x => x.Max(y => 1));
-        private Method Count     = new Method<IQueryable<object>>(x => x.Count());
-        private Method LongCount = new Method<IQueryable<object>>(x => x.LongCount());
+        public  IMethod Select    = new Method<IQueryable<object>>(x => x.Select(y => new object()));
+        private IMethod Distinct  = new Method<IQueryable<object>>(x => x.Distinct());
+        private IMethod Min       = new Method<IQueryable<object>>(x => x.Min(y => 1));
+        private IMethod Max       = new Method<IQueryable<object>>(x => x.Max(y => 1));
+        private IMethod Count     = new Method<IQueryable<object>>(x => x.Count());
+        private IMethod LongCount = new Method<IQueryable<object>>(x => x.LongCount());
 
 
         private bool       m_has_distinct      = false;
@@ -81,7 +81,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         }
 
 
-        public override IEnumerable<IMethodInfo> GetMethods()
+        public override IEnumerable<IMethod> GetMethods()
         {
             return new[] { Min, Max, Select, Distinct,Count,LongCount}.Union(Method.GetMethodsByName(typeof(Queryable), "Sum")).Union(Method.GetMethodsByName(typeof(Queryable), "Average"));
         }

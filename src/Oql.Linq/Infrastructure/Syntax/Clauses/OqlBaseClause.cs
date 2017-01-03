@@ -33,9 +33,9 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         public abstract void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall);
        
 
-        public virtual IEnumerable<IMethodInfo> GetMethods()
+        public virtual IEnumerable<IMethod> GetMethods()
         {
-            return Enumerable.Empty<IMethodInfo>();
+            return Enumerable.Empty<IMethod>();
         }
         
         public abstract void VisitTo      (IOqlExpressionVisitor visitor);

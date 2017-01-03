@@ -24,7 +24,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
         }
 
 
-        public override IEnumerable<IMethodInfo> GetMethods()
+        public override IEnumerable<IMethod> GetMethods()
         {
             yield return new Method<string>(x => x.EndsWith(string.Empty));
         }

@@ -10,8 +10,8 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     public class OqlWhereClause : OqlBaseClause
     {
 
-        private static Method Where     = new Method<IQueryable<object>>(x => x.Where(y => true));
-        private static Method SkipWhile = new Method<IQueryable<object>>(x => x.SkipWhile(y => true));
+        private static IMethod Where     = new Method<IQueryable<object>>(x => x.Where(y => true));
+        private static IMethod SkipWhile = new Method<IQueryable<object>>(x => x.SkipWhile(y => true));
 
 
 
@@ -57,7 +57,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         }
 
 
-        public override IEnumerable<IMethodInfo> GetMethods()
+        public override IEnumerable<IMethod> GetMethods()
         {
             return new[] { Where, SkipWhile }.Union(OqlNavigationClause.WithPredicates());
         }

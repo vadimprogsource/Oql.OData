@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Oql.Linq.Infrastructure.Syntax.Methods
 {
 
-    public class Method : IMethodInfo
+    public class Method : IMethod
     {
 
         public static IEnumerable<Method> GetMethodsByName(Type type, string methodName)
@@ -82,7 +82,10 @@ namespace Oql.Linq.Infrastructure.Syntax.Methods
             return Expression.Call(m_method_info.MakeGenericMethod(typeof(T),typeof(V)), left, Expression.Quote(right));
         }
 
-
+        public MethodInfo GetBaseMethod()
+        {
+            return GetKeyMethod(m_method_info);
+        }
     }
 
     public class Method<T> : Method

@@ -5,12 +5,13 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Oql.Linq.Api.Syntax;
 using Oql.Linq.Infrastructure.Syntax.Methods;
+using Oql.Linq.Api.Metadata;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
     public class OqlDeleteClause : OqlBaseClause
     {
-        internal static Method Delete = new Method<IQueryable<object>>(x => x.Delete());
+        internal static IMethod Delete = new Method<IQueryable<object>>(x => x.Delete());
 
         public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {

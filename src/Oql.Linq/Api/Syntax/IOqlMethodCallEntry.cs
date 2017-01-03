@@ -11,7 +11,7 @@ namespace Oql.Linq.Api.Syntax
 {
     public interface IOqlMethodCallEntry
     {
-        IEnumerable<IMethodInfo> GetMethods();
+        IEnumerable<IMethod> GetMethods();
         IOqlClause              Clause    { get; }
         IOqlMethodCallFormatter Formatter { get; }
     }

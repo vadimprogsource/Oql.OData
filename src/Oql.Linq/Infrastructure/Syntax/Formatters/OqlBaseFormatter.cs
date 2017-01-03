@@ -31,9 +31,9 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
         public abstract void FormatMethodCall(IOqlExpressionVisitor visitor, MethodCallExpression method);
        
 
-        public virtual  IEnumerable<IMethodInfo> GetMethods()
+        public virtual  IEnumerable<IMethod> GetMethods()
         {
-            return Enumerable.Empty<IMethodInfo>();
+            return Enumerable.Empty<IMethod>();
         }
     }
 }

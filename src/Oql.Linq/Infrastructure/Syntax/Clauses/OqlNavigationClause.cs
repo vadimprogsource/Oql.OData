@@ -11,34 +11,34 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
     {
 
 
-        private static Method FirstWithPredicate              = new Method<IQueryable<object>>(x => x.First(y => true));
-        private static Method FirstWithoutPredicate           = new Method<IQueryable<object>>(x => x.First());
-        private static Method FirstOrDefaultWithPredicate     = new Method<IQueryable<object>>(x => x.FirstOrDefault(y => true));
-        private static Method FirstOrDefaultWithoutPredicate  = new Method<IQueryable<object>>(x => x.FirstOrDefault(y => true));
-        private static Method SingleWithPredicate             = new Method<IQueryable<object>>(x => x.Single(y => true));
-        private static Method SingleWithoutPredicate          = new Method<IQueryable<object>>(x => x.Single());
-        private static Method SingleOrDefaultWithPredicate    = new Method<IQueryable<object>>(x => x.SingleOrDefault(y => true));
-        private static Method SingleOrDefaultWithoutPredicate = new Method<IQueryable<object>>(x => x.SingleOrDefault());
-        private static Method LastWithPredicate               = new Method<IQueryable<object>>(x => x.Last(y => true));
-        private static Method LastWithoutPredicate            = new Method<IQueryable<object>>(x => x.Last());
-        private static Method LastOrDefaultWithPredicate      = new Method<IQueryable<object>>(x => x.LastOrDefault(y => true));
-        private static Method LastOrDefaultWithoutPredicate   = new Method<IQueryable<object>>(x => x.LastOrDefault());
-        private static Method AllWithPredicate                = new Method<IQueryable<object>>(x => x.All(y => true));
-        private static Method AnyWithPredicate                = new Method<IQueryable<object>>(x => x.Any(y => true));
-        private static Method AnyWithoutPredicate             = new Method<IQueryable<object>>(x => x.Any());
+        private static IMethod FirstWithPredicate              = new Method<IQueryable<object>>(x => x.First(y => true));
+        private static IMethod FirstWithoutPredicate           = new Method<IQueryable<object>>(x => x.First());
+        private static IMethod FirstOrDefaultWithPredicate     = new Method<IQueryable<object>>(x => x.FirstOrDefault(y => true));
+        private static IMethod FirstOrDefaultWithoutPredicate  = new Method<IQueryable<object>>(x => x.FirstOrDefault(y => true));
+        private static IMethod SingleWithPredicate             = new Method<IQueryable<object>>(x => x.Single(y => true));
+        private static IMethod SingleWithoutPredicate          = new Method<IQueryable<object>>(x => x.Single());
+        private static IMethod SingleOrDefaultWithPredicate    = new Method<IQueryable<object>>(x => x.SingleOrDefault(y => true));
+        private static IMethod SingleOrDefaultWithoutPredicate = new Method<IQueryable<object>>(x => x.SingleOrDefault());
+        private static IMethod LastWithPredicate               = new Method<IQueryable<object>>(x => x.Last(y => true));
+        private static IMethod LastWithoutPredicate            = new Method<IQueryable<object>>(x => x.Last());
+        private static IMethod LastOrDefaultWithPredicate      = new Method<IQueryable<object>>(x => x.LastOrDefault(y => true));
+        private static IMethod LastOrDefaultWithoutPredicate   = new Method<IQueryable<object>>(x => x.LastOrDefault());
+        private static IMethod AllWithPredicate                = new Method<IQueryable<object>>(x => x.All(y => true));
+        private static IMethod AnyWithPredicate                = new Method<IQueryable<object>>(x => x.Any(y => true));
+        private static IMethod AnyWithoutPredicate             = new Method<IQueryable<object>>(x => x.Any());
 
 
-        private static Method ElementAt          = new Method<IQueryable<object>>(x => x.ElementAt(1));
-        private static Method ElementAtOrDefault = new Method<IQueryable<object>>(x => x.ElementAt(1));
+        private static IMethod ElementAt          = new Method<IQueryable<object>>(x => x.ElementAt(1));
+        private static IMethod ElementAtOrDefault = new Method<IQueryable<object>>(x => x.ElementAt(1));
 
-        private static Method Skip = new Method<IQueryable<object>>(x => x.Skip(1));
-        private static Method Take = new Method<IQueryable<object>>(x => x.Take(1));
+        private static IMethod Skip = new Method<IQueryable<object>>(x => x.Skip(1));
+        private static IMethod Take = new Method<IQueryable<object>>(x => x.Take(1));
 
-        private static Method CountWithPredicate     = new Method<IQueryable<object>>(x => x.Count    (y=>true));
-        private static Method LongCountWithPredicate = new Method<IQueryable<object>>(x => x.LongCount(y=>true));
+        private static IMethod CountWithPredicate     = new Method<IQueryable<object>>(x => x.Count    (y=>true));
+        private static IMethod LongCountWithPredicate = new Method<IQueryable<object>>(x => x.LongCount(y=>true));
 
 
-        public static IEnumerable<IMethodInfo> WithPredicates()
+        public static IEnumerable<IMethod> WithPredicates()
         {
             yield return AnyWithPredicate;
             yield return FirstWithPredicate;
@@ -115,25 +115,25 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
             if (methodCall.IsCalled(Skip))
             {
-                callContext.CallResult.Offset = (int)methodCall.Arguments[1].GetValue();
+                callContext.CallResult.Offset = (int)methodCall.GetArgument(1).GetValue();
                 return;
             }
 
             if(methodCall.IsCalled(Take))
             {
-                callContext.CallResult.Size = (int)methodCall.Arguments[1].GetValue();
+                callContext.CallResult.Size = (int)methodCall.GetArgument(1).GetValue();
                 return;
             }
 
             if (methodCall.IsCalled(ElementAt))
             {
-                callContext.CallResult.ElementIndex = (int)methodCall.Arguments[1].GetValue();
+                callContext.CallResult.ElementIndex = (int)methodCall.GetArgument(1).GetValue();
                 return;
             }
 
             if (methodCall.IsCalled(ElementAtOrDefault))
             {
-                callContext.CallResult.ElementIndex = (int)methodCall.Arguments[1].GetValue();
+                callContext.CallResult.ElementIndex = (int)methodCall.GetArgument(1).GetValue();
                 callContext.CallResult.CanDefault   = true;
                 return;
             }
@@ -143,7 +143,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
         }
 
 
-        public override IEnumerable<IMethodInfo> GetMethods()
+        public override IEnumerable<IMethod> GetMethods()
         {
             yield return AnyWithoutPredicate;
             yield return FirstWithoutPredicate;

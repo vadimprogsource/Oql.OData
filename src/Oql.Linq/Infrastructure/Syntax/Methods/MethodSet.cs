@@ -24,7 +24,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Methods
 
             TMethodCall methodEntry = new TMethodCall();
 
-            foreach (IMethodInfo m in methodEntry.GetMethods())
+            foreach (IMethod m in methodEntry.GetMethods())
             {
                 m_method_calls[m.GetMethodInfo()] = methodEntry;
             }
