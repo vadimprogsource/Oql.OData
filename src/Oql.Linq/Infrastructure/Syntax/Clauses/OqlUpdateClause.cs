@@ -5,37 +5,29 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Oql.Linq.Api.Syntax;
 using Oql.Linq.Infrastructure.Syntax.Methods;
+using Oql.Linq.Api.Data;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
-    public class OqlUpdateClause : OqlBaseClause
+    public class OqlUpdateClause : OqlInsertClause
     {
-        internal static Method UpdateInfo = new  Method<IQueryable<object>>(x => x.Update(y => y));
+        internal static Method Update = new  Method<IQueryable<object>>(x => x.Update(y => y));
 
-
-        private  MemberInitExpression m_member_init; 
-
-        public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
-        {
-            m_member_init = methodCall.GetArgument(1) as MemberInitExpression;
-        }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
         {
-
             visitor.Query.AppendUpdate().AppendType(visitor.SourceType).AppendSet();
 
-            MemberAssignment ma = m_member_init.Bindings.OfType<MemberAssignment>().First();
+            IDataChange dc = ChangeSet.First();
 
-            visitor.Query.AppendMember(ma.Member).AppendAssign();
-            visitor.Visit(ma.Expression);
+            visitor.Query.AppendMember(dc.PropertyOrField).AppendAssign();
+            visitor.Visit(dc.NewValue);
 
-            foreach (MemberAssignment x in m_member_init.Bindings.Skip(1))
+            foreach (IDataChange x in ChangeSet.Skip(1))
             {
-                visitor.Query.AppendExpressionSeparator().AppendMember(x.Member).AppendAssign();
-                visitor.Visit(x.Expression);
+                visitor.Query.AppendExpressionSeparator().AppendMember(dc.PropertyOrField).AppendAssign();
+                visitor.Visit(dc.NewValue);
             }
-
         }
     }
 }

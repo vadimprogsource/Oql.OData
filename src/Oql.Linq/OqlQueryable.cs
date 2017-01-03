@@ -39,7 +39,7 @@ namespace Oql.Linq
 
         public static int Update<TEntity,TResult>(this IQueryable<TEntity> query, Expression<Func<TEntity, TResult>> expression)
         {
-            return query.Provider.Execute<int>(OqlUpdateClause.UpdateInfo.Call<TEntity, TResult>(query.Expression, expression));
+            return query.Provider.Execute<int>(OqlUpdateClause.Update.Call<TEntity, TResult>(query.Expression, expression));
         }
 
         public static int Delete<TEntity>(this IQueryable<TEntity> query)

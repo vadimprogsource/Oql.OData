@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Oql.Linq.Api.Syntax;
 using Oql.Linq.Infrastructure.Syntax.Methods;
+using Oql.Linq.Api.Data;
+using Oql.Linq.Infrastructure.Data;
 
 namespace Oql.Linq.Infrastructure.Syntax.Clauses
 {
@@ -13,12 +15,33 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
         internal static Method Insert = new Method<IQueryable<object>>(x => x.Insert(y => y));
 
+        private IDataChangeSet m_change_set;
 
-        private MemberInitExpression m_init_expression;
+
+        protected IDataChangeSet ChangeSet { get { return m_change_set; } }
 
         public override void ProcessMethodCall(IOqlSyntaxContext callContext, MethodCallExpression methodCall)
         {
-            m_init_expression = methodCall.GetArgument(1) as MemberInitExpression;
+
+            Expression x = methodCall.GetArgument(1);
+
+            if (x.NodeType == ExpressionType.MemberInit)
+            {
+                m_change_set = new MemberInitChangeSet(x as MemberInitExpression);
+                return;
+            }
+
+            object obj = x.GetValue();
+
+            if (obj is IDataChangeSet)
+            {
+                m_change_set = obj as IDataChangeSet;
+                return;
+            }
+
+
+            m_change_set = new ObjectChangeSet(obj);
+
         }
 
         public override void VisitTo(IOqlExpressionVisitor visitor)
@@ -26,27 +49,28 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
             visitor.Query.AppendInsert().AppendType(visitor.SourceType).AppendBeginExpression();
 
-            Expression[] vals = new Expression[m_init_expression.Bindings.Count];
+            Expression       val;
+            List<Expression> vals = new List<Expression>();
 
-            for (int i = 0; i < vals.Length; i++)
+
+            IDataChange dc = m_change_set.First();
+
+            val = dc.NewValue;
+            visitor.Query.AppendMember(dc.PropertyOrField);
+
+
+            foreach (IDataChange x in m_change_set.Skip(1))
             {
-                MemberAssignment ma = m_init_expression.Bindings[i] as MemberAssignment;
+                visitor.Query.AppendExpressionSeparator();
+                visitor.Query.AppendMember(x.PropertyOrField);
 
-                vals[i] = ma.Expression;
-
-                if (i > 0)
-                {
-                    visitor.Query.AppendExpressionSeparator();
-                }
-
-                visitor.Query.AppendMember(ma.Member);
             }
 
             visitor.Query.AppendEndExpression().AppendValues().AppendBeginExpression();
 
-            visitor.Visit(vals.First());
+            visitor.Visit(val);
 
-            foreach(Expression x in vals.Skip(1))
+            foreach (Expression x in vals)
             {
                 visitor.Query.AppendExpressionSeparator();
                 visitor.Visit(x);

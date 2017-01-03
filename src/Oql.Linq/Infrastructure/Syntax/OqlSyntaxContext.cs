@@ -128,7 +128,7 @@ namespace Oql.Linq.Infrastructure.Syntax
                     return ForInsert();
                 }
 
-                if (methodCall.IsCalled(OqlUpdateClause.UpdateInfo))
+                if (methodCall.IsCalled(OqlUpdateClause.Update))
                 {
                     m_call_result.IsModifier = true;
                     return ForUpdate();
