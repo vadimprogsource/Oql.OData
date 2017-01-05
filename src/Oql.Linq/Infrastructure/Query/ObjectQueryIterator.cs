@@ -10,13 +10,20 @@ using System.Threading.Tasks;
 
 namespace Oql.Linq.Infrastructure.Query
 {
-    public class ObjectQueryIterator<TEntity> : IEnumerable<TEntity> , IEnumerator<TEntity>, IDisposable
+
+    public class ObjectQueryIterator<TEntity> : ObjectQueryNavigator<TEntity> , IEnumerator<TEntity>, IDisposable
     {
+
+       
+
 
         private readonly IDataSource       m_data_source;
         private readonly IDataSet          m_data_set   ;
         private readonly ConstructorInfo   m_ctor       ;
 
+
+
+     
 
         private  IEnumerator<IDataStruct> m_enumerator;
 
@@ -45,15 +52,10 @@ namespace Oql.Linq.Infrastructure.Query
          }
 
 
-        public IEnumerator<TEntity> GetEnumerator()
+        public override  IEnumerator<TEntity> GetEnumerator()
         {
             Reset();
             return this;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
       

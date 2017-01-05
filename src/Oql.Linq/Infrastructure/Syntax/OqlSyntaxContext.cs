@@ -120,29 +120,29 @@ namespace Oql.Linq.Infrastructure.Syntax
 
             if (expression.NodeType == ExpressionType.Call)
             {
+
+                m_call_result.Command = OqlCommandToken.Exec;
+
                 MethodCallExpression methodCall = expression as MethodCallExpression;
 
                 if (methodCall.IsCalled(OqlInsertClause.Insert))
                 {
-                    m_call_result.IsModifier = true;
                     return ForInsert();
                 }
 
                 if (methodCall.IsCalled(OqlUpdateClause.Update))
                 {
-                    m_call_result.IsModifier = true;
                     return ForUpdate();
                 }
 
                 if (methodCall.IsCalled(OqlDeleteClause.Delete))
                 {
-                    m_call_result.IsModifier = true;
                     return ForDelete();
                 }
 
             }
 
-            m_call_result.IsModifier = false;
+            m_call_result.Command = OqlCommandToken.Select;
             return ForSelect();
         }
     }

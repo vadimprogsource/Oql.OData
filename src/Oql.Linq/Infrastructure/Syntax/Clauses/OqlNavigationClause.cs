@@ -59,52 +59,50 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
             if (methodCall.IsCalledOr(AnyWithPredicate,AnyWithoutPredicate))
             {
-                callContext.CallResult.IsAny      = true;
+                callContext.CallResult.Command = OqlCommandToken.IsAny;
                 return;
             }
 
 
             if (methodCall.IsCalledOr(FirstWithPredicate,FirstWithoutPredicate))
             {
-                callContext.CallResult.HasFirst = true;
+                callContext.CallResult.Command = OqlCommandToken.First;
                 return;
             }
 
             if (methodCall.IsCalledOr(FirstOrDefaultWithPredicate, FirstOrDefaultWithoutPredicate))
             {
-                callContext.CallResult.HasFirst = true;
+                callContext.CallResult.Command = OqlCommandToken.First | OqlCommandToken.DefaultFlag;
                 return;
             }
 
             if (methodCall.IsCalledOr(SingleWithPredicate, SingleWithoutPredicate))
             {
-                callContext.CallResult.HasSingle = true;
+                callContext.CallResult.Command = OqlCommandToken.Single;
                 return;
             }
 
             if (methodCall.IsCalledOr(SingleOrDefaultWithPredicate, SingleOrDefaultWithoutPredicate))
             {
-                callContext.CallResult.HasSingle = true;
-                callContext.CallResult.CanDefault = true;
+                callContext.CallResult.Command = OqlCommandToken.Single | OqlCommandToken.DefaultFlag;
                 return;
             }
 
             if (methodCall.IsCalledOr(LastWithPredicate, LastWithoutPredicate))
             {
-                callContext.CallResult.HasLast = true;
+                callContext.CallResult.Command = OqlCommandToken.Last;
                 return;
             }
 
             if (methodCall.IsCalledOr(LastOrDefaultWithPredicate, LastOrDefaultWithoutPredicate))
             {
-                callContext.CallResult.HasLast   = true;
-                callContext.CallResult.CanDefault = true;
+                callContext.CallResult.Command = OqlCommandToken.Last | OqlCommandToken.DefaultFlag;
                 return;
             }
 
             if (methodCall.IsCalledOr(CountWithPredicate, LongCountWithPredicate))
             {
-                callContext.CallResult.IsScalar = true;
+                callContext.CallResult.Command = OqlCommandToken.Scalar;
                 return;
             }
 
@@ -127,6 +125,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
             if (methodCall.IsCalled(ElementAt))
             {
+                callContext.CallResult.Command = OqlCommandToken.ElementAt;
                 callContext.CallResult.ElementIndex = (int)methodCall.GetArgument(1).GetValue();
                 return;
             }
@@ -134,7 +133,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             if (methodCall.IsCalled(ElementAtOrDefault))
             {
                 callContext.CallResult.ElementIndex = (int)methodCall.GetArgument(1).GetValue();
-                callContext.CallResult.CanDefault   = true;
+                callContext.CallResult.Command = OqlCommandToken.ElementAt | OqlCommandToken.DefaultFlag;
                 return;
             }
 

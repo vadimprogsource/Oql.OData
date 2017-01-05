@@ -73,7 +73,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
             if (methodCall.IsCalledOr(Count, LongCount))
             {
-                callContext.CallResult.IsScalar = true;
+                callContext.CallResult.Command = OqlCommandToken.Scalar;
             }
 
             visit_to_aggregate = null;
@@ -117,7 +117,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
                 return;
             }
 
-            if (visitor.Context.CallResult.IsScalar)
+            if (visitor.Context.CallResult.Command == OqlCommandToken.Scalar)
             {
                 visitor.Query.AppendSelect().AppendBlank();
                 visitor.Context.AggregateFormatter.FormatCount(visitor);
@@ -125,13 +125,13 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             }
 
 
-            if (visitor.Context.CallResult.IsAny)
+            if (visitor.Context.CallResult.Command == OqlCommandToken.IsAny)
             {
                 visitor.Query.AppendSelect().AppendTop(1).AppendBlank().AppendMultiply();
                 return;
             }
 
-            if (visitor.Context.CallResult.IsAll)
+            if (visitor.Context.CallResult.Command == OqlCommandToken.IsAll)
             {
                 visitor.Query.AppendSelect().AppendBlank().AppendMultiply();
                 return;

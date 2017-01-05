@@ -57,23 +57,33 @@ namespace Oql.Linq.Infrastructure.Query
         }
 
 
+        private int ExecuteCommand(IOqlExpressionVisitor visitor)
+        {
+            using (IDataSource dataSource = m_data_provider.GetDataSource())
+            {
+                return dataSource.ExecuteCommand(visitor.Query);
+            }
+        }
+
+        private object GetScalar(IOqlExpressionVisitor visitor)
+        {
+            using (IDataSource dataSource = m_data_provider.GetDataSource())
+            {
+                return Convert.ChangeType(dataSource.GetScalar(visitor.Query), visitor.Context.CallResult.ResultType);
+            }
+        }
+
         public object Execute(Expression expression)
         {
             IOqlExpressionVisitor visitor = m_data_provider.CreateExpressionVisitor().ExecuteVisit(expression);
 
-            if (visitor.Context.CallResult.IsModifier)
+            switch (visitor.Context.CallResult.Command)
             {
-                return m_data_provider.GetDataSource().ExecuteCommand(visitor.Query);
+                case OqlCommandToken.Exec  : return ExecuteCommand(visitor);
+                case OqlCommandToken.Scalar: return GetScalar(visitor);
+                default:
+                    return ObjectQueryNavigator.CreateResult(visitor.Context.CallResult, m_data_provider.GetDataSource(), visitor.Query);
             }
-
-
-            if(visitor.Context.CallResult.IsScalar)
-            {
-                return m_data_provider.GetDataSource().GetScalar(visitor.Query);
-            }
-
-
-            return Activator.CreateInstance(typeof(ObjectQueryIterator<>).MakeGenericType(visitor.Context.CallResult.ResultType), m_data_provider.GetDataSource(), visitor.Query);
         }
 
         public TResult Execute<TResult>(Expression expression)

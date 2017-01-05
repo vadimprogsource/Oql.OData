@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 
 namespace Oql.Linq.Api.Syntax
 {
+
+
+    public enum OqlCommandToken : byte {Select = 0 ,Single =1 , First ,ElementAt , Last , Exec , Scalar ,IsAll , IsAny , DefaultFlag =   128    } 
+
+
     public interface IOqlCallResult
     {
         Type ResultType { get; set; }
@@ -12,20 +17,9 @@ namespace Oql.Linq.Api.Syntax
         int Offset { get; set; }
         int Size { get; set; }
 
-        bool IsScalar { get; set; }
-
-        bool HasSingle { get; set; }
-        bool CanDefault { get; set; }
-        bool HasFirst { get; set; }
-        bool HasLast { get; set; }
-        bool HasElementAt { get; }
-
         int ElementIndex { get; set; }
 
-        bool IsAny { get; set; }
-        bool IsAll { get; set; }
-
-        bool IsModifier { get; }
+        OqlCommandToken Command { get; set; }
 
     }
 }
