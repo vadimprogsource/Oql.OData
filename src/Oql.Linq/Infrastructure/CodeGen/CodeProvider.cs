@@ -9,19 +9,19 @@ namespace Oql.Linq.Infrastructure.CodeGen
     {
 
 
-        private class EntityEqualityComparer : IEqualityComparer<IEntityInfo>
+        private class EntityEqualityComparer : IEqualityComparer<IEntity>
         {
-            public bool Equals(IEntityInfo x, IEntityInfo y)
+            public bool Equals(IEntity x, IEntity y)
             {
                 if (x.BaseType == y.BaseType && x.Name == y.Name)
                 {
-                    IMemberInfo[] ax = x.Members , ay = y.Members;
+                    IProperty[] ax = x.Properties , ay = y.Properties;
 
                     if (ax.Length == ay.Length)
                     {
                         for (int i = 0, j = ax.Length-1; i < ax.Length && j > 0; i++, j--)
                         {
-                            IMemberInfo mx = ax[i], my = ay[i];
+                            IProperty mx = ax[i], my = ay[i];
 
                             if (mx.BaseType == my.BaseType && mx.Name == my.Name)
                             {
@@ -43,7 +43,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
                 return false;
             }
 
-            public int GetHashCode(IEntityInfo obj)
+            public int GetHashCode(IEntity obj)
             {
                 int hc =  obj.GetType().GetHashCode();
 
@@ -57,7 +57,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
                     hc ^= obj.Name.GetHashCode();
                 }
 
-                foreach (IMemberInfo m in obj.Members)
+                foreach (IProperty m in obj.Properties)
                 {
                     hc ^= (m.BaseType.GetHashCode() ^ m.Name.GetHashCode());
                 }
@@ -71,7 +71,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
         private readonly IEntityCodeBuilder            m_code_builder;
         private readonly Dictionary<string, Type>      m_entity_name_cache = new Dictionary<string, Type>();
-        private readonly Dictionary<IEntityInfo, Type> m_entity_type_cache = new Dictionary<IEntityInfo, Type>(new EntityEqualityComparer());
+        private readonly Dictionary<IEntity, Type> m_entity_type_cache = new Dictionary<IEntity, Type>(new EntityEqualityComparer());
 
         public CodeProvider(IEntityCodeBuilder codeBuilder)
         {
@@ -82,7 +82,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
         public CodeProvider() : this(new EntityCodeBuilder()) { }
 
 
-        public Type GetType(IEntityInfo entity)
+        public Type GetType(IEntity entity)
         {
             lock (this)
             {
@@ -98,7 +98,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
             }
         }
 
-        public Type GetType(IMetadataProvider provider, string entityName)
+        public Type GetType(IMetaDataProvider provider, string entityName)
         {
             lock (this)
             {

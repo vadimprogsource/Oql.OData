@@ -12,10 +12,11 @@ using System.Reflection;
 using System.Collections;
 using Oql.Linq.Infrastructure.CodeGen;
 using Oql.Linq.Infrastructure.Query.Processors;
+using Oql.Linq.Api;
 
 namespace Oql.Linq.Infrastructure.Query
 {
-    public  class ObjectQueryProvider : IObjectQueryProvider
+    public  class ObjectQueryProvider : IObjectQueryProvider , IExtent
     {
         private IDataProvider       m_data_provider;
         private ICodeProvider       m_code_provider ;
@@ -45,7 +46,7 @@ namespace Oql.Linq.Infrastructure.Query
             return Activator.CreateInstance(typeof(ObjectQuery<>).MakeGenericType(entityType) ,this ) as IQueryable;
         }
 
-        public IQueryable CreateQuery(IEntityInfo entityInfo)
+        public IQueryable CreateQuery(IEntity entityInfo)
         {
             Type entityType = m_code_provider.GetType(entityInfo);
             return Activator.CreateInstance(typeof(ObjectQuery<>).MakeGenericType(entityType), this) as IQueryable;
@@ -99,6 +100,11 @@ namespace Oql.Linq.Infrastructure.Query
         public IObjectQueryProcessor<TEntity> CreateQueryProcessor<TEntity>(IQueryable<TEntity> queryable)
         {
             return new ObjectQueryProcessor<TEntity>(queryable);
+        }
+
+        public IQueryable<TEntity> AsQueryable<TEntity>()
+        {
+            return CreateQuery<TEntity>();
         }
     }
 }

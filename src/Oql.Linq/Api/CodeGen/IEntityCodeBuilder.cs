@@ -5,6 +5,6 @@ namespace Oql.Linq.Api.CodeGen
 {
     public interface IEntityCodeBuilder
     {
-        Type Build(IEntityInfo entityInfo);
+        Type Build(IEntity entityInfo);
     }
 }

@@ -27,7 +27,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
             ParameterExpression x       = Expression.Parameter(entityType, "x");
             MemberExpression[]  members = new MemberExpression[names.Length];
-            EntityInfo          e       = new EntityInfo();
+            Entity          e       = new Entity();
 
 
             for (int i = 0; i < members.Length; i++)

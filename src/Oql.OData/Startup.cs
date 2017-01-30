@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Oql.Linq.Api.CodeGen;
-using Oql.Linq.Infrastructure.Metadata;
 using Oql.Linq.Infrastructure.CodeGen;
 using Oql.Linq.Api.Data;
 using Oql.Linq.Api.Query;
@@ -17,6 +12,7 @@ using OData.Linq.Infrastucture.Channels;
 using OData.Linq.Api;
 using OData.Linq.Infrastucture;
 using OData.Linq.Infrastucture.Parsing;
+using Oql.Linq.Api;
 
 namespace Oql.OData
 {
@@ -53,6 +49,7 @@ namespace Oql.OData
             services.AddSingleton<ICodeProvider>(x => new CodeProvider());
             services.AddScoped<IDataProvider>   (x => new MsSql.SqlDataProvider(ConnectionString));
             services.AddScoped<IObjectQueryProvider, ObjectQueryProvider>();
+            services.AddScoped<IExtent             , ObjectQueryProvider>();
 
             services.AddScoped<IODataChannelFactory, ODataChannelFactory>();
             services.AddScoped<IODataQueryProvider , ODataQueryProvider> ();

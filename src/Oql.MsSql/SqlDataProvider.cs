@@ -17,9 +17,9 @@ namespace Oql.MsSql
     public class SqlDataProvider : IDataProvider 
     {
 
-        public IMetadataProvider GetMetadata()
+        public IMetaDataProvider GetMetadata()
         {
-            return new SqlMetadataProvider(m_connection_string);
+            return new SqlMetaDataProvider(m_connection_string);
         }
 
         public IDataSource GetDataSource()

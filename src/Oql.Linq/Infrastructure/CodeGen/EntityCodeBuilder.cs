@@ -26,7 +26,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
         }
 
 
-        private string GetEntityName(IEntityInfo entity)
+        private string GetEntityName(IEntity entity)
         {
             if (string.IsNullOrWhiteSpace(entity.Name))
             {
@@ -59,7 +59,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
 
 
-        public Type Build(IEntityInfo entity)
+        public Type Build(IEntity entity)
         {
 
 
@@ -75,7 +75,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
             ILGenerator gen = MakeConstructor(typeBuilder, new Type[] { typeof(IDataStruct) });
 
-            foreach (IMemberInfo member in entity.Members)
+            foreach (IProperty member in entity.Properties)
             {
                 FieldBuilder field =   typeBuilder.DefineField("m_"+member.Name.ToLowerInvariant(), member.BaseType, FieldAttributes.Private);
 

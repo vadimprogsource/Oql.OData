@@ -10,20 +10,20 @@ using System.Linq.Expressions;
 
 namespace Oql.MsSql
 {
-    public class SqlMetadataProvider : IMetadataProvider
+    public class SqlMetaDataProvider : IMetaDataProvider
     {
 
         private string m_connection_string;
 
 
-        public SqlMetadataProvider(string connectionString)
+        public SqlMetaDataProvider(string connectionString)
         {
             m_connection_string = connectionString;
         }
 
 
 
-        private class _memberInfo : IMemberInfo
+        private class _memberInfo : IProperty
         {
             private _tableInfo m_table;
             private DataRow    m_row;
@@ -36,7 +36,7 @@ namespace Oql.MsSql
                 }
             }
 
-            public IEntityInfo RelatedEntity
+            public IEntity RelatedEntity
             {
                 get
                 {
@@ -76,6 +76,30 @@ namespace Oql.MsSql
                 }
             }
 
+            public IRelation Join
+            {
+                get
+                {
+                    return null;
+                }
+            }
+
+            public IScalarExpression Expression
+            {
+                get
+                {
+                    return null;
+                }
+            }
+
+            public IEntity Entity
+            {
+                get
+                {
+                    return m_table;
+                }
+            }
+
             public _memberInfo(_tableInfo table, DataRow row)
             {
                 m_table = table;
@@ -83,8 +107,9 @@ namespace Oql.MsSql
             }
         }
 
-        private class _tableInfo : IEntityInfo
+        private class _tableInfo : IEntity
         {
+            private bool m_lower_case;
             private DataTable m_table;
 
             private DataColumn m_is_identity;
@@ -105,7 +130,7 @@ namespace Oql.MsSql
                 }
             }
 
-            public IMemberInfo[] Members
+            public IProperty[] Properties
             {
                 get
                 {
@@ -127,7 +152,7 @@ namespace Oql.MsSql
                 }
             }
 
-            public IMemberInfo this[Expression propertyOrField]
+            public IFrom From
             {
                 get
                 {
@@ -135,8 +160,19 @@ namespace Oql.MsSql
                 }
             }
 
-            public _tableInfo(string name , DataTable schema)
+            public IProperty this[Expression propertyOrField]
             {
+                get
+                {
+                    return null;
+                }
+            }
+
+            public _tableInfo(string name , DataTable schema,bool lowerCase)
+            {
+
+                m_lower_case = lowerCase;
+
                 m_is_identity = schema.Columns["IsIdentity"];
                 m_is_unique   = schema.Columns["IsUnique"];
                 m_is_key      = schema.Columns["IsKey"];
@@ -147,7 +183,18 @@ namespace Oql.MsSql
 
                 m_table = schema;
 
+
+
+                if (lowerCase)
+                {
+                    name = name.ToLowerInvariant();
+                }
+
+
                 Name = name;
+
+
+
 
                 m_members = new List<_memberInfo>();
 
@@ -161,7 +208,7 @@ namespace Oql.MsSql
 
             public string GetName(DataRow row)
             {
-                return row[m_column_name].ToString().ToLowerInvariant();
+                return m_lower_case ? row[m_column_name].ToString().ToLowerInvariant() : row[m_column_name].ToString();
             }
 
 
@@ -189,7 +236,7 @@ namespace Oql.MsSql
 
 
 
-        public IEntityInfo GetEntity(string typeName, params IMemberInfo[] members)
+        public IEntity GetEntity(string typeName, bool lowerCase)
         {
             using (SqlConnection sqlConnection = new SqlConnection(m_connection_string))
             {
@@ -202,10 +249,20 @@ namespace Oql.MsSql
 
                 using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
                 {
-                    return new _tableInfo(typeName, sqlReader.GetSchemaTable());
+                    return new _tableInfo(typeName, sqlReader.GetSchemaTable(),lowerCase);
                 }
 
             }
+        }
+
+        public IEntityBuilder<T> CreateEntityBuilder<T>()
+        {
+            return null;
+        }
+
+        public IEntityBuilder CreateEntityBuilder(Type baseType)
+        {
+            return null;
         }
     }
 }

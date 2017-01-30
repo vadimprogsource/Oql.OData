@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace Oql.Linq.Api.Metadata
 {
-    public interface IMetaData
+
+    public interface IRelation
     {
-        string Name { get; }
-        Type  BaseType { get; }
+        bool IsOuterJoin { get; }
+        IEntity To { get; }
+        object  On { get; }
+        object Body { get; }
     }
 }

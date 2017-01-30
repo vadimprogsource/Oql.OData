@@ -5,8 +5,8 @@ namespace Oql.Linq.Api.CodeGen
 {
     public interface ICodeProvider
     {
-        Type GetType(IEntityInfo entity);
-        Type GetType(IMetadataProvider provider , string  entityName);
+        Type GetType(IEntity entity);
+        Type GetType(IMetaDataProvider provider , string  entityName);
 
     }
 }

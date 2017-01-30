@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Oql.Linq.Api.Metadata
 {
-    public interface IMetadataProvider
+    public interface IMetaDataProvider
     {
-        IEntityInfo GetEntity(string typeName, params IMemberInfo[] members);
+        IEntity GetEntity(string typeName, bool lowerCase = true);
+
+        IEntityBuilder<T> CreateEntityBuilder<T>();
+        IEntityBuilder CreateEntityBuilder(Type baseType);
+
     }
 }

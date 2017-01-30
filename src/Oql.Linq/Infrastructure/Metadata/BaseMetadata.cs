@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Oql.Linq.Infrastructure.Metadata
 {
-    public class BaseMetadata : IMetadata
+    public class BaseMetadata : IMetaData
     {
         public Type BaseType { get; set; }
         public string Name { get; set; }
@@ -14,7 +14,7 @@ namespace Oql.Linq.Infrastructure.Metadata
 
         public BaseMetadata() { }
 
-        public BaseMetadata(IMetadata metadata)
+        public BaseMetadata(IMetaData metadata)
         {
             BaseType = metadata.BaseType;
             Name     = metadata.Name;
