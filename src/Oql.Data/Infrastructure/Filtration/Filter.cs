@@ -8,7 +8,7 @@ namespace Oql.Data.Infrastructure.Filtration
 {
     public class Filter : IFilter
     {
-        private List<FilterCriteria> m_where = new List<FilterCriteria>();
+        private List<FilterCriteria> m_where   = new List<FilterCriteria>();
         private List<OrderCriteria> m_order_by = new List<OrderCriteria>();
 
         public int PageIndex { get; set; }

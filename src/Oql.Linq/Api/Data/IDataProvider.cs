@@ -9,4 +9,10 @@ namespace Oql.Linq.Api.Data
         IMetaDataProvider  GetMetadata();
         IDataSource        GetDataSource();
     }
+
+    public interface IDataProvider<T>
+    {
+        T Single(object identity);
+        IDataPage<T> SelectPage(object filter);
+    }
 }

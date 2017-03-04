@@ -20,4 +20,10 @@ namespace Oql.Linq.Api.Data
     {
         object Instance { get; }
     }
+
+    public interface IDataChangeSet<T> : IDataChangeSet
+    {
+        bool IsModifier<V>(Expression<Func<T, V>> propertyOrField);
+       new T Instance { get; } 
+    }
 }
