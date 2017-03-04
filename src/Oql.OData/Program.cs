@@ -12,19 +12,14 @@ namespace Oql.OData
         public static void Main(string[] args)
         {
 
-            IWebHostBuilder host = new WebHostBuilder()
+            var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                ;
+                .Build();
 
-            if (args.Any())
-            {
-                host = host.UseUrls($"http://{args.First()}:{args.ElementAt(1)}");
-            }
-
-            host.Build().Run();
+            host.Run();
         }
     }
 }
