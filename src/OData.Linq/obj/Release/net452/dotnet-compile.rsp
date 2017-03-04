@@ -1,0 +1,70 @@
+--temp-output:C:\GIT\Oql.OData\src\OData.Linq\obj\Release\net452\
+--out:C:\GIT\Oql.OData\src\OData.Linq\bin\Release\net452\OData.Linq.dll
+--define:RELEASE
+--define:TRACE
+--define:NET452
+--suppress-warning:CS1701
+--suppress-warning:CS1702
+--suppress-warning:CS1705
+--optimize:True
+--output-name:OData.Linq
+--file-version:1.0.0.0
+--version:1.0.0.0
+--informational-version:1.0.0
+--target-framework:.NETFramework,Version=v4.5.2
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Collections.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Collections.Concurrent.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Diagnostics.Debug.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Diagnostics.Tools.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Diagnostics.Tracing.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Globalization.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.IO.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.IO.Compression.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Linq.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Linq.Expressions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Linq.Queryable.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Net.Http.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Net.Primitives.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.ObjectModel.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Reflection.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Reflection.Emit.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Reflection.Extensions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Reflection.Primitives.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Resources.ResourceManager.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Runtime.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Runtime.Extensions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Runtime.InteropServices.dll
+--reference:C:\Users\dementey\.nuget\packages\System.Runtime.InteropServices.RuntimeInformation\4.0.0\ref\netstandard1.1\System.Runtime.InteropServices.RuntimeInformation.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Runtime.Numerics.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Text.Encoding.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Text.Encoding.Extensions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Text.RegularExpressions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Threading.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Threading.Tasks.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Threading.Timer.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Xml.ReaderWriter.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\System.Xml.XDocument.dll
+--reference:C:\GIT\Oql.OData\src\Oql.Linq\bin\Release\net452\Oql.Linq.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\mscorlib.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Core.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Microsoft.CSharp.dll
+C:\GIT\Oql.OData\src\OData.Linq\Api\IODataChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Api\IODataChannelFactory.cs
+C:\GIT\Oql.OData\src\OData.Linq\Api\IODataQueryParser.cs
+C:\GIT\Oql.OData\src\OData.Linq\Api\IODataQueryProvider.cs
+C:\GIT\Oql.OData\src\OData.Linq\Api\IODataReader.cs
+C:\GIT\Oql.OData\src\OData.Linq\Api\IODataToken.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\ODataQueryProvider.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\BaseODataChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\ODataChannelFactory.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\ODataExtendChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\ODataFilterChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\ODataOrderByChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\ODataSelectChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\ODataSkipChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Channels\ODataTopChannel.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Parsing\ODataQueryParser.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Parsing\ODataReader.cs
+C:\GIT\Oql.OData\src\OData.Linq\Infrastucture\Parsing\ODataToken.cs
+C:\GIT\Oql.OData\src\OData.Linq\Properties\AssemblyInfo.cs
