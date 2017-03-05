@@ -16,10 +16,12 @@ namespace Oql.Linq.Infrastructure.Data
     {
 
 
+        protected abstract IDataValidationStrategy<T> CreateValidator();
+
         protected abstract IDisposable TransactionScope(T instance);
 
 
-        protected abstract void RunInsert(T data);
+        protected abstract void RunInsert(T instance);
 
         protected virtual bool IsAccessForInsert(T data)
         {
@@ -27,23 +29,30 @@ namespace Oql.Linq.Infrastructure.Data
         }
 
 
-        public T ProcessInsert(T instance)
+        public IDataResult<T> ProcessInsert(T instance)
         {
-            if (IsAccessForInsert(instance))
-            {
-                using (TransactionScope(instance))
-                {
-                    RunInsert(instance);
-                    return InsertComplete(instance);
-                }
-            }
 
-            throw new DataPermissionException();
+            IDataValidationStrategy<T> validator = CreateValidator();
+
+
+            using (TransactionScope(instance))
+            {
+                if (IsAccessForInsert(instance))
+                {
+                    IDataResult<T> result = validator.Validate(new ObjectChangeSet<T>(instance));
+
+                    if (result.Ok)
+                    {
+                        RunInsert(instance);
+                        InsertComplete(instance);
+                    }
+                }
+                return validator.Context.CriticalError(instance, "PermissionDenied");
+            }
         }
 
-        protected virtual T InsertComplete(T instance)
+        protected virtual void InsertComplete(T instance)
         {
-            return instance;
         }
 
 
@@ -55,23 +64,34 @@ namespace Oql.Linq.Infrastructure.Data
 
         protected abstract void ApplyUpdate(IDataChangeSet<T> changeSet);
 
-        public T ProcessUpdate(IDataChangeSet<T> changeSet)
+
+
+        public IDataResult<T> ProcessUpdate(IDataChangeSet<T> changeSet)
         {
-            if (IsAccessForUpdate(changeSet.Instance))
+
+            IDataValidationStrategy<T> validator = CreateValidator();
+
+            using (TransactionScope(changeSet.Instance))
             {
-                using (TransactionScope(changeSet.Instance))
+                if (IsAccessForUpdate(changeSet.Instance))
                 {
-                    ApplyUpdate(changeSet);
-                    return UpdateComplete(changeSet.Instance);
+                    IDataResult<T> result = validator.Validate(changeSet);
+
+                    if (result.Ok)
+                    {
+                        ApplyUpdate   (changeSet);
+                        UpdateComplete(changeSet);
+                    }
                 }
+
+                return validator.Context.CriticalError(changeSet.Instance, "PermissionDenied");
             }
 
-            throw new DataPermissionException();
         }
 
-        protected virtual T UpdateComplete(T instance)
+        protected virtual void UpdateComplete(IDataChangeSet<T> changeSet)
         {
-            return instance;
+           
         }
 
         private bool IsAccessForDelete(T instance)
@@ -87,27 +107,24 @@ namespace Oql.Linq.Infrastructure.Data
 
         public bool ProcessDelete(T instance)
         {
-            if (IsAccessForDelete(instance))
-            {
-                using (TransactionScope(instance))
-                {
 
+            using (TransactionScope(instance))
+            {
+                if (IsAccessForDelete(instance))
+                {
                     if (ExecuteDelete(instance))
                     {
                         DeleteComplete(instance);
                         return true;
                     }
-
-                    return false;
                 }
             }
 
-            throw new DataPermissionException();
+            return false;
         }
 
-        protected virtual T DeleteComplete(T data)
+        protected virtual void DeleteComplete(T data)
         {
-            return data;
         }
     }
 }

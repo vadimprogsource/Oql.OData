@@ -66,4 +66,25 @@ namespace Oql.Linq.Infrastructure.Data
             return GetEnumerator();
         }
     }
+
+
+    public class ObjectChangeSet<T> : ObjectChangeSet, IDataChangeSet<T>
+    {
+        public ObjectChangeSet(T instance) : base(instance)
+        {
+        }
+
+        T IDataChangeSet<T>.Instance
+        {
+            get
+            {
+                return (T)Instance;
+            }
+        }
+
+        public bool IsModifier<V>(Expression<Func<T, V>> propertyOrField)
+        {
+            return true;
+        }
+    }
 }

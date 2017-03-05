@@ -7,9 +7,8 @@ namespace Oql.Linq.Api.Data
 {
     public interface IDataProcessor<T>
     {
-        T ProcessInsert(T instance);
-
-        T ProcessUpdate(IDataChangeSet<T> dataChangeSet);
+        IDataResult<T> ProcessInsert(T instance);
+        IDataResult<T> ProcessUpdate(IDataChangeSet<T> dataChangeSet);
         bool ProcessDelete(T instance);
     }
 }

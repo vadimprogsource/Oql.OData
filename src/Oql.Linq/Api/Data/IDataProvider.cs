@@ -1,5 +1,7 @@
 ﻿using Oql.Linq.Api.Metadata;
 using Oql.Linq.Api.Syntax;
+using System;
+using System.Linq.Expressions;
 
 namespace Oql.Linq.Api.Data
 {
@@ -12,7 +14,7 @@ namespace Oql.Linq.Api.Data
 
     public interface IDataProvider<T>
     {
-        T Single(object identity);
-        IDataPage<T> SelectPage(object filter);
+        IDataResult<T> SingleOrDefault(Guid dataIndetity);
+        IDataPage<T>   SelectPage     (IDataFilter dataFilter);
     }
 }

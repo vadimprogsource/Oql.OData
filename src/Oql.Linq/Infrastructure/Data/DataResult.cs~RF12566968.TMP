@@ -1,0 +1,70 @@
+﻿using Oql.Linq.Api.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Oql.Linq.Infrastructure.Data
+{
+    public class DataResult<T> : IDataResult<T>
+    {
+        private List<IDataError> data_errors = new List<IDataError>();
+
+
+        public T Instance { get; internal set; }
+
+        public bool Ok
+        {
+            get
+            {
+                return data_errors.Count < 1;
+            }
+        }
+
+        public bool HasErrors
+        {
+            get
+            {
+                return data_errors.Count > 0;
+            }
+        }
+
+        public IEnumerable<IDataError> Errors
+        {
+            get
+            {
+                return data_errors;
+            }
+        }
+
+
+        public void AddError(IDataError err)
+        {
+            data_errors.Add(err);
+
+            IEnumerable<IDataError> errs = err as IEnumerable<IDataError>;
+
+            if (errs != null)
+            {
+                data_errors.AddRange(errs);
+            }
+        }
+
+        public void AddException(Exception ex)
+        {
+            IDataError err = ex as IDataError;
+
+            if (err == null)
+            {
+                err = new DataError(0, ex.Message);
+            }
+
+            AddError(err);
+        }
+        public DataResult(T instance)
+        {
+            Instance = instance;
+        }
+
+    }
+}
