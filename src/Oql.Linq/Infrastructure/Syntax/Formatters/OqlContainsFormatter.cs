@@ -14,11 +14,22 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
             if (methodCall.Method.DeclaringType == typeof(Enumerable))
             {
                 visitor.Query.AppendBeginExpression();
-                visitor.Visit(methodCall.Arguments.First());
-                visitor.Query.AppendIn();
                 visitor.Visit(methodCall.Arguments[1]);
+                visitor.Query.AppendIn();
+                visitor.Visit(methodCall.Arguments.First());
                 visitor.Query.AppendEndExpression();
+                return;
+            }
 
+
+            if (methodCall.Method.DeclaringType == typeof(Queryable))
+            {
+                visitor.Query.AppendBeginExpression();
+                visitor.Visit(methodCall.Arguments[1]);
+                visitor.Query.AppendIn();
+                IQueryable query = methodCall.Arguments.First().GetValue() as IQueryable;
+                visitor.VisitSubQuery(query.Expression);
+                visitor.Query.AppendEndExpression();
                 return;
             }
 
@@ -37,6 +48,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
         {
             yield return new Method<string>             (x => x.Contains(string.Empty));
             yield return new Method<IEnumerable<object>>(x=>x.Contains(string.Empty));
+            yield return new Method<IQueryable<object>> (x => x.Contains(string.Empty));
         }
     }
 }

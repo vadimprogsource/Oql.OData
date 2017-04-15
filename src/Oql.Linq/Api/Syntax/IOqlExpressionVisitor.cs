@@ -14,6 +14,7 @@ namespace Oql.Linq.Api.Syntax
         IQueryBuilder       Query  { get; }
         Expression Visit(Expression expression);
         void VisitSearchPattern(bool hasBeginWildCard, Expression expression, bool hasEndWildCard);
+        IOqlExpressionVisitor VisitSubQuery(Expression expression);
 
         IOqlExpressionVisitor ExecuteVisit(Expression expression);
     }

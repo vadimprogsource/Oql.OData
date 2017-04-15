@@ -1,24 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EA74EB5B-3E96-446B-B64A-C5EF7010D166}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{547EA458-F96A-49D6-9458-9E0842066B67}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Oql.OData", "src\Oql.OData\Oql.OData.xproj", "{88BA7DD1-D242-4146-9C07-C5E4E734183E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oql.OData", "src\Oql.OData\Oql.OData.csproj", "{88BA7DD1-D242-4146-9C07-C5E4E734183E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Oql.Linq", "src\Oql.Linq\Oql.Linq.xproj", "{E8F44E6D-857B-4747-8B7A-9ED8282852D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oql.Linq", "src\Oql.Linq\Oql.Linq.csproj", "{E8F44E6D-857B-4747-8B7A-9ED8282852D3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Oql.MsSql", "src\Oql.MsSql\Oql.MsSql.xproj", "{23A2111C-1C37-4593-94F3-E598093BD97E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oql.MsSql", "src\Oql.MsSql\Oql.MsSql.csproj", "{23A2111C-1C37-4593-94F3-E598093BD97E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OData.Linq", "src\OData.Linq\OData.Linq.xproj", "{C1CA0137-FFCA-4CF8-992F-470D9DA5D378}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData.Linq", "src\OData.Linq\OData.Linq.csproj", "{C1CA0137-FFCA-4CF8-992F-470D9DA5D378}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Oql.Data", "src\Oql.Data\Oql.Data.xproj", "{2F4E6C7E-5AD3-4CE7-8A22-BDE516FBB906}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oql.Data", "src\Oql.Data\Oql.Data.csproj", "{2F4E6C7E-5AD3-4CE7-8A22-BDE516FBB906}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

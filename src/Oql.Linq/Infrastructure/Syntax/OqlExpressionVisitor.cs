@@ -265,6 +265,17 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
             Visit(expression);
             return MakeQuery();
         }
+
+        public IOqlExpressionVisitor VisitSubQuery(Expression expression)
+        {
+            IOqlExpressionVisitor visitor = new OqlExpressionVisitor(m_syntax_context)
+                                           .ExecuteVisit(expression);
+
+            m_query_builder.AppendBeginExpression();
+            m_query_builder.AppendToken(visitor);
+            m_query_builder.AppendEndExpression();
+            return visitor;
+        }
     }
 
 
