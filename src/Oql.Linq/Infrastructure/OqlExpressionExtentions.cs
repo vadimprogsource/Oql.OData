@@ -47,6 +47,12 @@ namespace Oql.Linq.Infrastructure
         }
 
 
+        public static MemberInfo GetMemberInfo(this Expression @this)
+        {
+            return (@this.GetInnerExpression() as MemberExpression).Member;
+        }
+
+
         public static object GetValue(this Expression @this)
         {
             if (@this.NodeType == ExpressionType.Constant)

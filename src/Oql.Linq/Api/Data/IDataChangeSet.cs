@@ -23,7 +23,8 @@ namespace Oql.Linq.Api.Data
 
     public interface IDataChangeSet<T> : IDataChangeSet
     {
-        bool IsModifier<V>(Expression<Func<T, V>> propertyOrField);
+        void SetModified<V>(Expression<Func<T, V>> propertyOrField);
+        bool IsModified<V>(Expression<Func<T, V>> propertyOrField);
        new T Instance { get; } 
     }
 }

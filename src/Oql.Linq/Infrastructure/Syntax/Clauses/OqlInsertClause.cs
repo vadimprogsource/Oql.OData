@@ -41,7 +41,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             }
 
 
-            m_change_set = new ObjectChangeSet(obj);
+            m_change_set = new ObjectChangeSet(obj).ChangeAllProperties();
 
         }
 

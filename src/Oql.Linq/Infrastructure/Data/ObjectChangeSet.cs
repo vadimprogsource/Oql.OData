@@ -11,41 +11,79 @@ namespace Oql.Linq.Infrastructure.Data
 {
     public class ObjectChangeSet : IDataChangeSet
     {
-        private class PropertyChange : IDataChange
+        private class DataMemberChange : IDataChange
         {
             private object       m_instance;
-            private PropertyInfo m_property;
+            private MemberInfo   m_member  ;
 
 
-            public PropertyChange(object instance , PropertyInfo property)
+            public DataMemberChange(object instance , MemberInfo property)
             {
                 m_instance = instance;
-                m_property = property;
+                m_member   = property;
             }
 
             public Expression NewValue
             {
                 get
                 {
-                    return Expression.Constant(m_property.GetValue(m_instance), m_property.PropertyType);
+
+                    switch (m_member.MemberType)
+                    {
+                        case MemberTypes.Property:
+                        {
+                            PropertyInfo pi = m_member as PropertyInfo;
+                            return Expression.Constant(pi.GetValue(m_instance), pi.PropertyType);
+                                  
+                        }
+
+                        case MemberTypes.Field:
+                        {
+                           FieldInfo fi = m_member as FieldInfo;
+                           return Expression.Constant(fi.GetValue(m_instance), fi.FieldType);
+                        }
+                    }
+
+                    throw new NotSupportedException();
+
                 }
             }
 
-            public MemberInfo PropertyOrField
-            {
-                get
-                {
-                    return m_property;
-                }
-            }
+            public MemberInfo PropertyOrField { get => m_member; }
+
         }
 
-        private object m_instance;
+        private object                m_instance;
+        private HashSet<MemberInfo>   m_changed_hash =new HashSet<MemberInfo>();
 
 
         public ObjectChangeSet(object instance)
         {
             m_instance = instance; 
+        }
+
+
+        public bool IsModified(MemberInfo propertyOrField)
+        {
+            return m_changed_hash.Contains(propertyOrField);
+        }
+
+        public void SetModified(MemberInfo propertyOrField)
+        {
+            m_changed_hash.Add(propertyOrField);
+        }
+
+
+        public IDataChangeSet ChangeAllProperties()
+        {
+            m_changed_hash.UnionWith(m_instance.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty));
+            return this;
+        }
+
+        public IDataChangeSet ChangeAllFields()
+        {
+            m_changed_hash.UnionWith(m_instance.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetField));
+            return this;
         }
 
         public object Instance 
@@ -58,7 +96,7 @@ namespace Oql.Linq.Infrastructure.Data
 
         public IEnumerator<IDataChange> GetEnumerator()
         {
-            return m_instance.GetType().GetProperties().Select(x => new PropertyChange(m_instance, x)).GetEnumerator();
+            return m_changed_hash.Select(x => new DataMemberChange(m_instance, x)).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -82,9 +120,14 @@ namespace Oql.Linq.Infrastructure.Data
             }
         }
 
-        public bool IsModifier<V>(Expression<Func<T, V>> propertyOrField)
+        public bool IsModified<V>(Expression<Func<T, V>> propertyOrField)
         {
-            return true;
+            return base.IsModified(propertyOrField.GetMemberInfo());
+        }
+
+        public void SetModified<V>(Expression<Func<T, V>> propertyOrField)
+        {
+            base.SetModified(propertyOrField.GetMemberInfo());
         }
     }
 }
