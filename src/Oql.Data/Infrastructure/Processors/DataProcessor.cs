@@ -13,82 +13,63 @@ namespace Oql.Data.Infrastructure.Processors
         protected abstract IDisposable TransactionScope(T instance);
 
 
-        protected abstract void RunInsert(T data);
+        protected abstract Task RunInsert(T data);
 
-        protected virtual bool IsAccessForInsert(T data)
+        protected abstract Task<bool> IsAccessForInsert(T data);
+       
+        public abstract Task<T> ProcessCreate(params object[] @params);
+      
+        public async Task<T> ProcessInsert(T data)
         {
-            return false;
-        }
-
-
-        public T ProcessInsert(T data)
-        {
-            if (IsAccessForInsert(data))
+            if (await IsAccessForInsert(data))
             {
                 using (TransactionScope(data))
                 {
-                    RunInsert(data);
-                    return InsertComplete(data);
+                    await RunInsert(data);
+                    return await InsertComplete(data);
                 }
             }
 
             throw new PermissionException();
         }
 
-        private T InsertComplete(T data)
+        protected abstract Task<T> InsertComplete(T data);
+      
+
+        protected abstract Task<bool> IsAccessForUpdate(T data);
+       
+        protected abstract Task ApplyUpdate(IChangeSet<T> data);
+
+        public async Task<T> ProcessUpdate(IChangeSet<T> data)
         {
-            return data;
-        }
-
-
-
-        protected virtual bool IsAccessForUpdate(T data)
-        {
-            return true;
-        }
-
-        protected abstract void ApplyUpdate(IChangeSet<T> data);
-
-        public T ProcessUpdate(IChangeSet<T> data)
-        {
-            if (IsAccessForUpdate(data.Instance))
+            if (await IsAccessForUpdate(data.Instance))
             {
                 using (TransactionScope(data.Instance))
                 {
-                    ApplyUpdate(data);
-                    return UpdateComplete(data);
+                    await ApplyUpdate(data);
+                    return await UpdateComplete(data);
                 }
             }
 
             throw new PermissionException();
         }
 
-        protected virtual T UpdateComplete(IChangeSet<T> data)
-        {
-            return data.Instance;
-        }
-
-        private bool IsAccessForDelete(T data)
-        {
-            return true;
-        }
-
-        protected virtual bool ExecuteDelete(T data)
-        {
-            return false;
-        }
+        protected abstract Task<T>    UpdateComplete(IChangeSet<T> data);
+        protected abstract Task<bool> IsAccessForDelete(T data);
+        protected abstract Task<bool> ExecuteDelete(T data);
+        
 
 
-        public bool ProcessDelete(T data)
+        public async Task<bool> ProcessDelete(T data)
         {
-            if (IsAccessForDelete(data))
+            if (await IsAccessForDelete(data))
             {
                 using (TransactionScope(data))
                 {
 
-                    if (ExecuteDelete(data))
+                    if (await ExecuteDelete(data))
                     {
-                        DeleteComplete(data);
+                        await DeleteComplete(data);
                         return true;
                     }
 
@@ -99,9 +80,8 @@ namespace Oql.Data.Infrastructure.Processors
             throw new PermissionException();
         }
 
-        protected virtual T DeleteComplete(T data)
-        {
-            return data;
-        }
+        protected abstract Task DeleteComplete(T data);
+
+      
     }
 }
