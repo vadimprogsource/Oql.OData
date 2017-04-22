@@ -11,15 +11,27 @@ namespace Oql.Linq.Infrastructure.Query
 {
     public abstract class ObjectQueryNavigator
     {
+
+        public abstract ObjectQueryNavigator Navigate();
+        public abstract Task<ObjectQueryNavigator> NavigateAsync();
+       
         public abstract object GetResult(IOqlCallResult callResult);
 
 
         public static object CreateResult(IOqlCallResult callResult,IDataSource dataSource,IQueryBuilder query)
         {
                 return (Activator.CreateInstance(typeof(ObjectQueryIterator<>).MakeGenericType(callResult.ResultType), dataSource, query) as ObjectQueryNavigator)
+                       .Navigate()
                        .GetResult(callResult);
-          }
+        }
 
+
+        public static Task<object> CreateResultAsync(IOqlCallResult callResult, IDataSource dataSource, IQueryBuilder query)
+        {
+            return (Activator.CreateInstance(typeof(ObjectQueryIterator<>).MakeGenericType(callResult.ResultType), dataSource, query) as ObjectQueryNavigator)
+                   .NavigateAsync()
+                   .ContinueWith(x=>x.Result.GetResult(callResult));
+        }
 
     }
 
@@ -35,8 +47,20 @@ namespace Oql.Linq.Infrastructure.Query
        };
 
 
-        public T GetSingle(IOqlCallResult callResult)
+        public override  object GetResult(IOqlCallResult callResult)
         {
+
+            if(callResult.Command== OqlCommandToken.Select)
+            {
+                return this as IEnumerable<T>;
+            }
+
+
+            if (callResult.Command == OqlCommandToken.IsAny)
+            {
+                return this.Any();
+            }
+
 
             int x, y = 0;
 
@@ -51,28 +75,14 @@ namespace Oql.Linq.Infrastructure.Query
             }
 
             return m_navigate_getters[x, y](this, callResult.ElementIndex);
+
+      
         }
+        
 
-
-        public override object GetResult(IOqlCallResult callResult)
-        {
-
-            if(callResult.Command== OqlCommandToken.Select)
-            {
-                return this as IEnumerable<T>;
-            }
-
-
-            if (callResult.Command == OqlCommandToken.IsAny)
-            {
-                return this.Any();
-            }
-
-            return GetSingle(callResult);
-        }
-
+   
         public abstract IEnumerator<T> GetEnumerator();
-       
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

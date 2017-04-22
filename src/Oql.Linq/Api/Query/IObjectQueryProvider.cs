@@ -19,5 +19,8 @@ namespace Oql.Linq.Api.Query
 
         IObjectQueryProcessor<TEntity> CreateQueryProcessor<TEntity>(IQueryable<TEntity> queryable);
 
+        Task<TResult> ExecuteAsync<TResult>(Expression expression);
+
+        Task<object> ExecuteAsync(Expression expression);
     }
 }

@@ -9,6 +9,7 @@ namespace Oql.Linq.Api.Metadata
     public interface IRelation
     {
         bool IsOuterJoin { get; }
+        bool IsInnerJoin { get; }
         IEntity To { get; }
         object  On { get; }
         object Body { get; }

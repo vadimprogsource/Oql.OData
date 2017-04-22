@@ -11,6 +11,9 @@ namespace Oql.Linq.Infrastructure.Data
         private T[] data_page;
         private int data_total_recs;
 
+
+
+
         public DataPage(int pageSize , int pageIndex , IQueryable<T> query)
         {
             data_total_recs = query.Count();

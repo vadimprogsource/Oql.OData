@@ -20,5 +20,6 @@ namespace Oql.Linq.Api.Data
 
     public interface IDataSet : IEnumerable<IDataStruct>, IDisposable
     {
+        Task<IDataStruct> GetRecordAsync();
     }
 }

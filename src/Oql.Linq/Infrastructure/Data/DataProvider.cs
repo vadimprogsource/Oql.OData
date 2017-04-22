@@ -12,13 +12,14 @@ namespace Oql.Linq.Infrastructure.Data
 
         protected abstract IQueryable<T> CreateQuery();
 
-        public abstract IDataResult<T> SingleOrDefault(Guid dataIdentity);
+        public abstract Task<IDataResult<T>> GetData(IDataIdentity<T> dataIndetity);
       
-        public IDataPage<T> SelectPage(IDataFilter dataFilter)
+        public Task<IDataPage<T>> GetPage(IDataFilter dataFilter)
         {
             IQueryable<T> query = CreateQuery();
-            return new DataPage<T>(dataFilter.PageSize, dataFilter.PageIndex, query);
+            return Task.FromResult( new DataPage<T>(dataFilter.PageSize, dataFilter.PageIndex, query) as IDataPage<T>);
         }
 
+      
     }
 }

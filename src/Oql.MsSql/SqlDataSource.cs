@@ -27,7 +27,6 @@ namespace Oql.MsSql
 
         }
 
-
         public int ExecuteCommand(IQueryBuilder query)
         {
             return GetCommand(query).ExecuteNonQuery();
@@ -43,10 +42,24 @@ namespace Oql.MsSql
             return GetCommand(query).ExecuteScalar();
         }
 
+        public Task<object> GetScalarAsync(IQueryBuilder query)
+        {
+            return GetCommand(query).ExecuteScalarAsync();
+        }
+
+        public Task<int> ExecuteCommandAsync(IQueryBuilder query)
+        {
+            return GetCommand(query).ExecuteNonQueryAsync();
+        }
+
         public void Dispose()
         {
             m_connection.Close();
         }
 
+        public async Task<IDataSet> GetDataSetAsync(IQueryBuilder query)
+        {
+            return new SqlDataSet(await GetCommand(query).ExecuteReaderAsync());
+        }
     }
 }

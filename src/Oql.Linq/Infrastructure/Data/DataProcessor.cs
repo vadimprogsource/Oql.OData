@@ -21,15 +21,13 @@ namespace Oql.Linq.Infrastructure.Data
         protected abstract IDisposable TransactionScope(T instance);
 
 
-        protected abstract void RunInsert(T instance);
+        protected abstract Task RunInsert(T instance);
 
-        protected virtual bool IsAccessForInsert(T data)
-        {
-            return false;
-        }
+        protected abstract Task<bool> IsAccessForInsert(T data);
+        
 
 
-        public IDataResult<T> ProcessInsert(T instance)
+        public async Task<IDataResult<T>> ProcessInsert(T instance)
         {
 
             IDataValidationStrategy<T> validator = CreateValidator();
@@ -37,51 +35,50 @@ namespace Oql.Linq.Infrastructure.Data
 
             using (TransactionScope(instance))
             {
-                if (IsAccessForInsert(instance))
+                if (await IsAccessForInsert(instance))
                 {
                     IDataResult<T> result = validator.Validate(new ObjectChangeSet<T>(instance));
 
                     if (result.Ok)
                     {
-                        RunInsert(instance);
-                        InsertComplete(instance);
+                        await RunInsert     (instance);
+                        await InsertComplete(instance);
                     }
+
+                    return result;
                 }
                 return validator.Context.CriticalError(instance, "PermissionDenied");
             }
         }
 
-        protected virtual void InsertComplete(T instance)
-        {
-        }
+        protected abstract Task InsertComplete(T instance);
 
 
 
-        protected virtual bool IsAccessForUpdate(T instance)
-        {
-            return true;
-        }
-
-        protected abstract void ApplyUpdate(IDataChangeSet<T> changeSet);
+        protected abstract Task<bool> IsAccessForUpdate(T instance);
+       
+        protected abstract Task ApplyUpdate(IDataChangeSet<T> changeSet);
 
 
 
-        public IDataResult<T> ProcessUpdate(IDataChangeSet<T> changeSet)
+        public async Task<IDataResult<T>> ProcessUpdate(IDataChangeSet<T> changeSet)
         {
 
             IDataValidationStrategy<T> validator = CreateValidator();
 
             using (TransactionScope(changeSet.Instance))
             {
-                if (IsAccessForUpdate(changeSet.Instance))
+                if (await IsAccessForUpdate(changeSet.Instance))
                 {
                     IDataResult<T> result = validator.Validate(changeSet);
 
                     if (result.Ok)
                     {
-                        ApplyUpdate   (changeSet);
-                        UpdateComplete(changeSet);
+                        await ApplyUpdate   (changeSet);
+                        await UpdateComplete(changeSet);
                     }
+
+                    return result;
                 }
 
                 return validator.Context.CriticalError(changeSet.Instance, "PermissionDenied");
@@ -89,32 +86,23 @@ namespace Oql.Linq.Infrastructure.Data
 
         }
 
-        protected virtual void UpdateComplete(IDataChangeSet<T> changeSet)
-        {
-           
-        }
+        protected abstract Task UpdateComplete(IDataChangeSet<T> changeSet);
 
-        private bool IsAccessForDelete(T instance)
-        {
-            return true;
-        }
+        protected abstract Task<bool> IsAccessForDelete(T instance);
 
-        protected virtual bool ExecuteDelete(T instance)
-        {
-            return false;
-        }
+        protected abstract Task<bool> ExecuteDelete(T instance);
+      
 
-
-        public bool ProcessDelete(T instance)
+        public async Task<bool> ProcessDelete(T instance)
         {
 
             using (TransactionScope(instance))
             {
-                if (IsAccessForDelete(instance))
+                if (await IsAccessForDelete(instance))
                 {
-                    if (ExecuteDelete(instance))
+                    if (await ExecuteDelete(instance))
                     {
-                        DeleteComplete(instance);
+                        await DeleteComplete(instance);
                         return true;
                     }
                 }
@@ -123,8 +111,7 @@ namespace Oql.Linq.Infrastructure.Data
             return false;
         }
 
-        protected virtual void DeleteComplete(T data)
-        {
-        }
+        protected abstract Task DeleteComplete(T data);
+        
     }
 }

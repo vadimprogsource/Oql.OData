@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OData.Linq.Api;
+using Oql.Linq;
 using Oql.Linq.Api.Data;
 using Oql.OData.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,9 +23,11 @@ namespace Oql.OData.Controllers
         }
 
         [HttpGet("{entityType}")]
-        public IQueryable ExecuteQuery(string entityType)
+        public async Task<IEnumerable> ExecuteQuery(string entityType)
         {
-            return m_query_provider.CreateQuery(entityType, WebUtility.UrlDecode(Request.QueryString.ToString()));
+            return await m_query_provider
+                         .CreateQuery(entityType, WebUtility.UrlDecode(Request.QueryString.ToString()))
+                         .AsEnumerableAsync();
         }
 
       

@@ -62,14 +62,19 @@ namespace Oql.Linq.Infrastructure.CodeGen
         public Type Build(IEntity entity)
         {
 
-
             TypeBuilder typeBuilder = m_module_builder.DefineType(GetEntityName(entity), TypeAttributes.Class | TypeAttributes.Public);
 
             if (entity.BaseType != null && entity.BaseType != typeof(object))
             {
-                typeBuilder.SetParent(entity.BaseType);
+                if (entity.BaseType.IsInterface)
+                {
+                    typeBuilder.AddInterfaceImplementation(entity.BaseType);
+                }
+                else
+                {
+                    typeBuilder.SetParent(entity.BaseType);
+                }
             }
-
 
             MakeConstructor(typeBuilder).Emit(OpCodes.Ret);
 

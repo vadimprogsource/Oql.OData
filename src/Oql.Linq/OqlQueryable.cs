@@ -2,8 +2,11 @@
 using Oql.Linq.Api.Query;
 using Oql.Linq.Infrastructure.Syntax.Clauses;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Oql.Linq
 {
@@ -45,6 +48,32 @@ namespace Oql.Linq
         public static int Delete<TEntity>(this IQueryable<TEntity> query)
         {
             return query.Provider.Execute<int>(OqlDeleteClause.Delete.Call<TEntity>(query.Expression));
+        }
+
+
+        public static Task<IEnumerable<T>> AsEnumerableAsync<T>(this IQueryable<T> query)
+        {
+            IObjectQueryProvider provider = query.Provider as IObjectQueryProvider;
+
+            if (provider == null)
+            {
+                return Task.FromResult(query.Provider.Execute<IEnumerable<T>>(query.Expression));
+            }
+
+            return provider.ExecuteAsync<IEnumerable<T>>(query.Expression); 
+        }
+
+
+        public static Task<IEnumerable> AsEnumerableAsync(this IQueryable query)
+        {
+            IObjectQueryProvider provider = query.Provider as IObjectQueryProvider;
+
+            if (provider == null)
+            {
+                return Task.FromResult(query.Provider.Execute(query.Expression) as IEnumerable);
+            }
+
+            return provider.ExecuteAsync(query.Expression).ContinueWith(x=>x.Result as IEnumerable);
         }
 
     }

@@ -13,6 +13,7 @@ using System.Collections;
 using Oql.Linq.Infrastructure.CodeGen;
 using Oql.Linq.Infrastructure.Query.Processors;
 using Oql.Linq.Api;
+using System.Threading.Tasks;
 
 namespace Oql.Linq.Infrastructure.Query
 {
@@ -105,6 +106,43 @@ namespace Oql.Linq.Infrastructure.Query
         public IQueryable<TEntity> AsQueryable<TEntity>()
         {
             return CreateQuery<TEntity>();
+        }
+
+
+        private async Task<int> ExecuteCommandAsync(IOqlExpressionVisitor visitor)
+        {
+            using (IDataSource dataSource = m_data_provider.GetDataSource())
+            {
+                return await dataSource.ExecuteCommandAsync(visitor.Query);
+            }
+        }
+
+        private async Task<object> GetScalarAsync(IOqlExpressionVisitor visitor)
+        {
+            using (IDataSource dataSource = m_data_provider.GetDataSource())
+            {
+                return  Convert.ChangeType(await dataSource.GetScalarAsync(visitor.Query), visitor.Context.CallResult.ResultType);
+            }
+        }
+
+
+
+        public Task<TResult> ExecuteAsync<TResult>(Expression expression)
+        {
+            return ExecuteAsync(expression).ContinueWith(x => (TResult)x.Result);
+        }
+
+        public async Task<object> ExecuteAsync(Expression expression)
+        {
+            IOqlExpressionVisitor visitor = m_data_provider.CreateExpressionVisitor().ExecuteVisit(expression);
+
+            switch (visitor.Context.CallResult.Command)
+            {
+                case OqlCommandToken.Exec  : return await ExecuteCommandAsync(visitor);
+                case OqlCommandToken.Scalar: return await GetScalarAsync(visitor);
+                default:
+                    return await ObjectQueryNavigator.CreateResultAsync(visitor.Context.CallResult, m_data_provider.GetDataSource(), visitor.Query);
+            }
         }
     }
 }

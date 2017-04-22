@@ -135,5 +135,15 @@ namespace Oql.MsSql
         {
             return GetValue<T>(GetIndex(name));
         }
+
+        public async Task<IDataStruct> GetRecordAsync()
+        {
+            if (await m_reader.ReadAsync())
+            {
+                return this;
+            }
+
+            return null;
+        }
     }
 }

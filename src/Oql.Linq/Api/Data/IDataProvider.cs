@@ -2,6 +2,7 @@
 using Oql.Linq.Api.Syntax;
 using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Oql.Linq.Api.Data
 {
@@ -14,7 +15,7 @@ namespace Oql.Linq.Api.Data
 
     public interface IDataProvider<T>
     {
-        IDataResult<T> SingleOrDefault(Guid dataIndetity);
-        IDataPage<T>   SelectPage     (IDataFilter dataFilter);
+        Task<IDataResult<T>> GetData(IDataIdentity<T> dataIndetity);
+        Task<IDataPage<T>>   GetPage     (IDataFilter dataFilter);
     }
 }

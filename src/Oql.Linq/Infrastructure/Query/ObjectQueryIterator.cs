@@ -14,13 +14,17 @@ namespace Oql.Linq.Infrastructure.Query
     public class ObjectQueryIterator<TEntity> : ObjectQueryNavigator<TEntity> , IEnumerator<TEntity>, IDisposable
     {
 
-       
+
+        private readonly static ConstructorInfo m_ctor  = typeof(TEntity).GetConstructor(new Type[] { typeof(IDataStruct)});
 
 
-        private readonly IDataSource       m_data_source;
-        private readonly IDataSet          m_data_set   ;
-        private readonly ConstructorInfo   m_ctor       ;
 
+
+        private readonly IQueryBuilder     m_query_builder;
+        private readonly IDataSource       m_data_source  ;
+        private          IDataSet          m_data_set     ;
+        private          List<TEntity>     m_result_set; 
+        
 
 
      
@@ -45,17 +49,29 @@ namespace Oql.Linq.Infrastructure.Query
 
         public ObjectQueryIterator(IDataSource dataSource , IQueryBuilder query )
         {
-            m_data_source = dataSource;
-            m_data_set    = dataSource.GetDataSet(query);
-            m_ctor        = typeof(TEntity).GetConstructor(new Type[] { typeof(IDataStruct) });
+            m_data_source   = dataSource;
+            m_query_builder = query;
 
+            m_data_set   = null;
+            m_result_set = null;
          }
 
 
+        public void Reset()
+        {
+        }
+
         public override  IEnumerator<TEntity> GetEnumerator()
         {
-            Reset();
-            return this;
+
+            if (m_result_set == null)
+            {
+                m_enumerator = m_data_set.GetEnumerator();
+                return this;
+            }
+
+            return m_result_set.GetEnumerator();
+
         }
 
       
@@ -64,17 +80,41 @@ namespace Oql.Linq.Infrastructure.Query
             return m_enumerator.MoveNext();
         }
 
-        public void Reset()
-        {
-            m_enumerator = m_data_set.GetEnumerator();
-        }
+    
 
 
         public void Dispose()
         {
-            m_data_set.Dispose();
-            m_data_source.Dispose();
+            if (m_data_set != null)
+            {
+                m_data_set.Dispose();
+                m_data_source.Dispose();
+            }
+
+            m_data_set = null;
+
         }
 
+        public async override Task<ObjectQueryNavigator> NavigateAsync()
+        {
+
+            m_result_set = new List<TEntity>();
+
+            m_data_set = await m_data_source.GetDataSetAsync(m_query_builder);
+
+            for (IDataStruct x = await m_data_set.GetRecordAsync(); x != null; x = await m_data_set.GetRecordAsync())
+            {
+                m_result_set.Add((TEntity)m_ctor.Invoke(new object[] {x}));
+            }
+
+            Dispose();
+            return this;
+        }
+
+        public override ObjectQueryNavigator Navigate()
+        {
+            m_data_set = m_data_source.GetDataSet(m_query_builder);
+            return this;
+        }
     }
 }
