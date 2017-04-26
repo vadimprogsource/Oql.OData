@@ -4,3 +4,4 @@ C:\GIT\Oql.OData\src\Oql.Data\bin\Debug\netstandard1.6\Oql.Data.pdb
 C:\GIT\Oql.OData\src\Oql.Data\obj\Debug\netstandard1.6\Oql.Data.AssemblyInfo.cs
 C:\GIT\Oql.OData\src\Oql.Data\obj\Debug\netstandard1.6\Oql.Data.dll
 C:\GIT\Oql.OData\src\Oql.Data\obj\Debug\netstandard1.6\Oql.Data.pdb
+C:\GIT\Oql.OData\src\Oql.Data\obj\Debug\netstandard1.6\Oql.Data.csprojResolveAssemblyReference.cache

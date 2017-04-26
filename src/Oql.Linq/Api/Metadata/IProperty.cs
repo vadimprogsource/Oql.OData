@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Oql.Linq.Api.Metadata
@@ -13,5 +14,6 @@ namespace Oql.Linq.Api.Metadata
         bool IsPrimaryKey { get; }
         IRelation Join { get; }
         IScalarExpression Expression { get; }
+        PropertyInfo BaseProperty { get; }
     }
 }

@@ -21,7 +21,7 @@ namespace Oql.Linq.Infrastructure.CodeGen
         public EntityCodeBuilder()
         {
 
-            m_asm_builder    =  AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(GetType().Name + Guid.NewGuid()), AssemblyBuilderAccess.RunAndCollect);
+            m_asm_builder    =  AssemblyBuilder.DefineDynamicAssembly(new AssemblyName($"{GetType().Name}-{Guid.NewGuid()}"), AssemblyBuilderAccess.RunAndCollect);
             m_module_builder =    m_asm_builder.DefineDynamicModule  ("module");
         }
 
@@ -58,6 +58,20 @@ namespace Oql.Linq.Infrastructure.CodeGen
         }
 
 
+        private void DefinePropertyMethod(TypeBuilder typeBuilder , IProperty property , Func<PropertyInfo,MethodInfo> @override , MethodInfo body)
+        {
+            PropertyInfo pi = property.BaseProperty;
+
+            if (pi != null)
+            {
+                MethodInfo decl = @override(pi);
+
+                if (decl != null)
+                {
+                    typeBuilder.DefineMethodOverride(body, decl);
+                }
+            }
+        }
 
         public Type Build(IEntity entity)
         {
@@ -92,10 +106,9 @@ namespace Oql.Linq.Infrastructure.CodeGen
                 gen.Emit(OpCodes.Stfld , field);
 
 
-
                 PropertyBuilder property = typeBuilder.DefineProperty(member.Name, PropertyAttributes.None, member.BaseType , new Type[] {member.BaseType });
 
-                MethodBuilder mdBuilder = typeBuilder.DefineMethod("get_" + member.Name.ToLowerInvariant(), MethodAttributes.Public | MethodAttributes.HideBySig,member.BaseType , new Type[] { } );
+                MethodBuilder mdBuilder = typeBuilder.DefineMethod("get_" + member.Name.ToLowerInvariant(), MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,member.BaseType , new Type[] { } );
 
                 ILGenerator mdGen = mdBuilder.GetILGenerator();
                 mdGen.Emit(OpCodes.Ldarg_0);
@@ -104,7 +117,10 @@ namespace Oql.Linq.Infrastructure.CodeGen
 
                 property.SetGetMethod(mdBuilder);
 
-                mdBuilder = typeBuilder.DefineMethod("set_" + member.Name.ToLowerInvariant(), MethodAttributes.Public | MethodAttributes.HideBySig, null, new Type[] { member.BaseType});
+                DefinePropertyMethod(typeBuilder, member, x => x.CanRead ? x.GetGetMethod() : null, mdBuilder);
+
+
+                mdBuilder = typeBuilder.DefineMethod("set_" + member.Name.ToLowerInvariant(), MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, null, new Type[] { member.BaseType});
 
 
                 mdGen = mdBuilder.GetILGenerator();
@@ -114,6 +130,9 @@ namespace Oql.Linq.Infrastructure.CodeGen
                 mdGen.Emit(OpCodes.Ret);
 
                 property.SetSetMethod(mdBuilder);
+
+                DefinePropertyMethod(typeBuilder, member, x => x.CanWrite ? x.GetSetMethod() : null,mdBuilder);
+
             }
 
             gen.Emit(OpCodes.Ret);

@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Oql.MsSql
 {
@@ -99,6 +100,8 @@ namespace Oql.MsSql
                     return m_table;
                 }
             }
+
+            public PropertyInfo BaseProperty => null;
 
             public _memberInfo(_tableInfo table, DataRow row)
             {

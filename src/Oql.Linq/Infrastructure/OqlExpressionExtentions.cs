@@ -10,6 +10,23 @@ namespace Oql.Linq.Infrastructure
 {
     public static class OqlExpressionExtentions
     {
+
+
+
+        public static IEnumerable<MemberInfo> SelectMembers(this Type @base)
+        {
+            if (@base.IsInterface)
+            {
+                return @base.GetInterfaces()
+                            .SelectMany(x => x.GetProperties())
+                            .Union(@base.GetProperties())
+                            .OfType<MemberInfo>();
+            }
+
+            return @base.GetMembers().Where(x => x.MemberType == MemberTypes.Property);
+        }
+
+
         public static bool IsPropertyOrField(this Expression @this)
         {
             for (Expression x = @this; x != null;)

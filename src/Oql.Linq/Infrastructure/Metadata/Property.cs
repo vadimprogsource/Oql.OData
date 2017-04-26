@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Oql.Linq.Infrastructure.Metadata
 {
@@ -38,6 +39,8 @@ namespace Oql.Linq.Infrastructure.Metadata
             set;
         }
 
+        public PropertyInfo BaseProperty { get; internal set; }
+
         public Property() { }
 
         public Property(IProperty member) : base(member)
@@ -45,6 +48,7 @@ namespace Oql.Linq.Infrastructure.Metadata
             AllowNull     = member.AllowNull;
             Size          = member.Size;
             IsPrimaryKey  = member.IsPrimaryKey;
+            BaseProperty  = member.BaseProperty;
         
         }
 

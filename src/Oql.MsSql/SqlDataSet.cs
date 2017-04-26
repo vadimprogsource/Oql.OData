@@ -18,6 +18,13 @@ namespace Oql.MsSql
         {
             m_fields = null;
             m_reader = reader;
+
+            m_fields = new Dictionary<string, int>();
+
+            for (int i = 0; i < m_reader.FieldCount; i++)
+            {
+                m_fields.Add(m_reader.GetName(i), i);
+            }
         }
 
         public IDataStruct Current
@@ -140,7 +147,7 @@ namespace Oql.MsSql
         {
             if (await m_reader.ReadAsync())
             {
-                return this;
+                return new SqlDataRecord(m_fields , m_reader);
             }
 
             return null;

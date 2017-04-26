@@ -142,8 +142,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             
             if (m_select_expression == null)
             {
-
-                IEnumerable<MemberInfo> members = visitor.SourceType.GetMembers().Where(x=>x.MemberType == MemberTypes.Property);
+                IEnumerable<MemberInfo> members = visitor.SourceType.SelectMembers();
 
                 if (members.Any())
                 {

@@ -1,6 +1,7 @@
 ﻿using Oql.Linq.Api;
 using Oql.Linq.Api.Data;
 using Oql.Linq.Api.Syntax;
+using Oql.Linq.Infrastructure.CodeGen;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace Oql.Linq.Infrastructure.Query
     {
 
 
-        private readonly static ConstructorInfo m_ctor  = typeof(TEntity).GetConstructor(new Type[] { typeof(IDataStruct)});
-
+        private readonly  Func<IDataStruct, TEntity> m_read_obj = new EntityConstructorBuilder<TEntity>().Build();
 
 
 
@@ -35,7 +35,7 @@ namespace Oql.Linq.Infrastructure.Query
         {
             get
             {
-                return (TEntity)m_ctor.Invoke(new object[] { m_enumerator.Current });
+                return  m_read_obj(m_enumerator.Current);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Oql.Linq.Infrastructure.Query
 
             for (IDataStruct x = await m_data_set.GetRecordAsync(); x != null; x = await m_data_set.GetRecordAsync())
             {
-                m_result_set.Add((TEntity)m_ctor.Invoke(new object[] {x}));
+                m_result_set.Add(m_read_obj(x));
             }
 
             Dispose();
