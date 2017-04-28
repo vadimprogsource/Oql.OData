@@ -12,6 +12,7 @@ namespace Oql.Linq.Api.Syntax
 
     public interface IOqlCallResult
     {
+        Type SourceType { get; set; }
         Type ResultType { get; set; }
 
         int Offset { get; set; }

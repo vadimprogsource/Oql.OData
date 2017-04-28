@@ -37,14 +37,14 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
             m_select_expression = methodCall.GetArgument(1);
 
 
+            callContext.CallResult.ResultType = methodCall.Type;
+
+
             if (m_select_expression.NodeType == ExpressionType.MemberInit || m_select_expression.NodeType == ExpressionType.New)
             {
                 return;
             }
-
-
-            callContext.CallResult.ResultType = methodCall.Type;
-
+            
             if (methodCall.IsCalled(Min))
             {
                 visit_to_aggregate = (x,y) => callContext.AggregateFormatter.FormatMin(x, y);
@@ -160,7 +160,11 @@ namespace Oql.Linq.Infrastructure.Syntax.Clauses
 
             }
 
+
             visitor.Visit(m_select_expression);
+
+     
+
         }
     }
 }

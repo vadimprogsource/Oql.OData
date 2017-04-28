@@ -29,9 +29,9 @@ namespace Oql.OData.Controllers
         public Task<IEnumerable> ExecuteQuery(string entityType)
         {
 
-            IQueryable<User> users = provider.CreateQuery<User>();
+            IQueryable<IUser> users = provider.CreateQuery<IUser>();
 
-            User[] usr = users.Where(x => x.Id > 0).ToArray();
+            var usr = users.Where(x => x.Password  == "полковник").Select(x=>new {x.Id , x.Name }).FirstOrDefault();
 
 
 

@@ -14,7 +14,8 @@ namespace Oql.OData.Models
     {
         string Name { get; }
     }
-    public interface User : IObject , IClassifier
+    public interface IUser : IObject , IClassifier
     {
+        string Password { get; }
     }
 }

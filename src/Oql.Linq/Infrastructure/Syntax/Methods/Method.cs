@@ -82,11 +82,18 @@ namespace Oql.Linq.Infrastructure.Syntax.Methods
             return Expression.Call(m_method_info.MakeGenericMethod(typeof(T),typeof(V)), left, Expression.Quote(right));
         }
 
+
+        public Expression Call<T, V>(Expression @this, LambdaExpression left , LambdaExpression right)
+        {
+            return Expression.Call(m_method_info.MakeGenericMethod(typeof(T), typeof(V)), @this, Expression.Quote(left),Expression.Quote(right));
+        }
+
         public MethodInfo GetBaseMethod()
         {
             return GetKeyMethod(m_method_info);
         }
-    }
+
+        }
 
     public class Method<T> : Method
     {

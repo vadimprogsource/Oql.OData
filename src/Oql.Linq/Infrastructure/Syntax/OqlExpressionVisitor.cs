@@ -163,8 +163,7 @@ namespace Oql.Linq.Infrastructure.Syntax.Formatters
 
             if (value is IQueryable)
             {
-                SourceType = (value as IQueryable).ElementType;
-                m_syntax_context.CallResult.ResultType = SourceType;
+                m_syntax_context.CallResult.SourceType = SourceType = (value as IQueryable).ElementType;
                 return node;
             }
 

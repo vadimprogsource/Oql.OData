@@ -259,6 +259,13 @@ namespace Oql.MsSql
 
         public IQueryBuilder AppendType(Type type)
         {
+
+            if (type.IsInterface && type.Name.StartsWith("I"))
+            {
+                sql.Append('[').Append(type.Name.Substring(1)).Append(']');
+                return this;
+            }
+
             sql.Append('[').Append(type.Name).Append(']');
             return this;
         }

@@ -10,7 +10,9 @@ namespace Oql.Linq.Infrastructure.Syntax
     {
 
         public int ElementIndex { get; set; } = -1;
-       
+
+        public Type SourceType { get; set; }
+
         public Type ResultType { get; set; }
 
         public int Offset { get; set; } = 0;
@@ -18,6 +20,5 @@ namespace Oql.Linq.Infrastructure.Syntax
 
 
         public OqlCommandToken Command { get; set; } = OqlCommandToken.Select;
-       
     }
 }

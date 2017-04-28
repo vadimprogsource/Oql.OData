@@ -50,6 +50,15 @@ namespace Oql.Linq
             return query.Provider.Execute<int>(OqlDeleteClause.Delete.Call<TEntity>(query.Expression));
         }
 
+        public static IQueryable<TEntity> OuterJoin<TEntity, TRelation>(this IQueryable<TEntity> query, Expression<Func<TEntity, TRelation>> relation, Expression<Func<TEntity, TRelation, bool>> condition)
+        {
+          return query.Provider.CreateQuery<TEntity>(OqlFromClause.OuterJoin.Call<TEntity, TRelation>(query.Expression, relation, condition));
+        }
+
+        public static IQueryable<TEntity> InnerJoin<TEntity, TRelation>(this IQueryable<TEntity> query, Expression<Func<TEntity, TRelation>> relation, Expression<Func<TEntity, TRelation, bool>> condition)
+        {
+            return query.Provider.CreateQuery<TEntity>(OqlFromClause.InnerJoin.Call<TEntity, TRelation>(query.Expression, relation, condition));
+        }
 
         public static Task<IEnumerable<T>> AsEnumerableAsync<T>(this IQueryable<T> query)
         {

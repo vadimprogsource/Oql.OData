@@ -16,5 +16,8 @@ namespace Oql.Linq.Api.Metadata
         Expression Call<T>(Expression operand);
        
         Expression Call<T, V>(Expression left, LambdaExpression right);
+
+        Expression Call<T, V>(Expression @this, LambdaExpression left, LambdaExpression right);
+
     }
 }
