@@ -31,7 +31,7 @@ namespace Oql.OData.Controllers
 
             IQueryable<IUser> users = provider.CreateQuery<IUser>();
 
-            var usr = users.Where(x => x.Password  == "*****").Select(x=>new {x.Id , x.Name }).FirstOrDefault();
+            IUser usr = users.Where(x => x.Password  == "*****").Select(x=>new {x.Id , x.Name }).FirstOrDefault();
 
 
 
